@@ -66,7 +66,7 @@ echo "\n";
 $sql = "SELECT id FROM `catalog` WHERE `catalog_type`='local'";
 $db_results = Dba::read($sql);
 
-while ($row = Dba::fetch_assoc($db_results)) {
+while ($row = Dba::fetchAssoc($db_results)) {
 
     $catalog = Catalog::create_from_id($row['0']);
     printf(T_('Checking %s (%s)'), $catalog->name, $catalog->path);

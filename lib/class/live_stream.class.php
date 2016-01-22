@@ -27,7 +27,7 @@
  * this can include podcasts or what-have-you
  *
  */
-class Live_Stream extends database_object implements media, library_item
+class Live_Stream extends AbstractDatabaseObject implements MediaInterface, LibraryItemInterface
 {
     /* DB based variables */
 
@@ -107,30 +107,30 @@ class Live_Stream extends database_object implements media, library_item
         return array();
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->name;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'live_stream') {
+        if (!$filterType || $filterType == 'live_stream') {
             $medias[] = array(
                 'object_type' => 'live_stream',
                 'object_id' => $this->id
@@ -145,7 +145,7 @@ class Live_Stream extends database_object implements media, library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog);
     }
@@ -168,7 +168,7 @@ class Live_Stream extends database_object implements media, library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'live_stream')) {
-            Art::display('live_stream', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('live_stream', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -288,7 +288,7 @@ class Live_Stream extends database_object implements media, library_item
 
     public function get_stream_name()
     {
-        return $this->get_fullname();
+        return $this->getFullname();
     }
 
     /**
@@ -296,7 +296,7 @@ class Live_Stream extends database_object implements media, library_item
      *
      * This will probably never be implemented
      */
-    public function get_transcode_settings($target = null, $player = null, $options=array())
+    public function getTranscodeSettings($target = null, $player = null, $options=array())
     {
         return false;
     }
@@ -318,7 +318,7 @@ class Live_Stream extends database_object implements media, library_item
         $db_results = Dba::read($sql, $params);
         $radios     = array();
 
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $radios[] = $results['id'];
         }
 

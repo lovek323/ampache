@@ -1,33 +1,16 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 namespace Lib\Metadata\Model;
+
+use Lib\AbstractDatabaseObject;
+use Lib\Interfaces\Model;
 
 /**
  * Description of metadata
  *
  * @author raziel
  */
-class Metadata extends \Lib\DatabaseObject implements \Lib\Interfaces\Model
+class Metadata extends AbstractDatabaseObject implements Model
 {
     /**
      * Database ID
@@ -37,7 +20,7 @@ class Metadata extends \Lib\DatabaseObject implements \Lib\Interfaces\Model
 
     /**
      * A library item like song or video
-     * @var \library_item
+     * @var \LibraryItemInterface
      */
     protected $objectId;
 
@@ -58,19 +41,17 @@ class Metadata extends \Lib\DatabaseObject implements \Lib\Interfaces\Model
      * @var string
      */
     protected $type;
-    
+
     /**
      *
      * @var array Stores relation between SQL field name and repository class name so we
      * can initialize objects the right way
      */
-    protected $fieldClassRelations = array(
-        'field' => '\Lib\Metadata\Repository\MetadataField'
-    );
+    protected $fieldClassRelations = ['field' => MetadataField::class];
 
     /**
      *
-     * @return \library_item
+     * @return \LibraryItemInterface
      */
     public function getObjectId()
     {
@@ -140,3 +121,5 @@ class Metadata extends \Lib\DatabaseObject implements \Lib\Interfaces\Model
         $this->type = $type;
     }
 }
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

@@ -89,9 +89,9 @@ class AmpachePaypal
      * display_user_field
      * This display the module in user page
      */
-    public function display_user_field(library_item $libitem = null)
+    public function display_user_field(LibraryItemInterface $libitem = null)
     {
-        $name = ($libitem != null) ? $libitem->get_fullname() : (T_('User') . " `" . $this->user->fullname . "` " . T_('on') . " " . AmpConfig::get('site_title'));
+        $name = ($libitem != null) ? $libitem->getFullname() : (T_('User') . " `" . $this->user->fullname . "` " . T_('on') . " " . AmpConfig::get('site_title'));
         $lang = substr(AmpConfig::get('lang'), 0, 2);
         if (empty($lang)) {
             $lang = 'US';

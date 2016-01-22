@@ -27,7 +27,7 @@
  * it contains functions for creating/listing/updated the catalogs.
  *
  */
-abstract class Catalog extends database_object
+abstract class Catalog extends AbstractDatabaseObject
 {
     /**
      * @var int $id
@@ -157,7 +157,7 @@ abstract class Catalog extends database_object
      */
     abstract public function get_rel_path($file_path);
     /**
-     * @return media|null
+     * @return MediaInterface|null
      */
     abstract public function prepare_media($media);
 
@@ -211,7 +211,7 @@ abstract class Catalog extends database_object
     {
         $sql        = 'SELECT `catalog_type` FROM `catalog` WHERE `id` = ?';
         $db_results = Dba::read($sql, array($id));
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             return self::create_catalog_type($results['catalog_type'], $id);
         }
 
@@ -392,7 +392,7 @@ abstract class Catalog extends database_object
         $sql        = "SELECT `id` FROM $table WHERE `catalog_id` = ?";
         $db_results = Dba::read($sql, array($id));
 
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             $info_type = parent::get_info($results['id'], $table);
             foreach ($info_type as $key => $value) {
                 if (!$info[$key]) {
@@ -441,14 +441,14 @@ abstract class Catalog extends database_object
             $db_results = Dba::read($sql, array($this->id));
 
             // Populate the filecache
-            while ($results = Dba::fetch_assoc($db_results)) {
+            while ($results = Dba::fetchAssoc($db_results)) {
                 $this->_filecache[strtolower($results['file'])] = $results['id'];
             }
 
             $sql        = 'SELECT `id`,`file` FROM `video` WHERE `catalog` = ?';
             $db_results = Dba::read($sql, array($this->id));
 
-            while ($results = Dba::fetch_assoc($db_results)) {
+            while ($results = Dba::fetchAssoc($db_results)) {
                 $this->_filecache[strtolower($results['file'])] = 'v_' . $results['id'];
             }
         }
@@ -539,7 +539,7 @@ abstract class Catalog extends database_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -793,7 +793,7 @@ abstract class Catalog extends database_object
         $sql        = 'SELECT DISTINCT(`song`.`album`) FROM `song` WHERE `song`.`catalog` = ?';
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['album'];
         }
 
@@ -818,7 +818,7 @@ abstract class Catalog extends database_object
         $sql .= 'WHERE `video`.`catalog` = ?';
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -890,7 +890,7 @@ abstract class Catalog extends database_object
         $sql .= 'WHERE `video`.`catalog` = ?';
 
         $db_results = Dba::read($sql, array($this->id));
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -934,7 +934,7 @@ abstract class Catalog extends database_object
         $sql        = 'SELECT DISTINCT(`song`.`artist`) FROM `song` WHERE `song`.`catalog` = ?';
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['artist'];
         }
 
@@ -976,7 +976,7 @@ abstract class Catalog extends database_object
         $results    = array();
         $db_results = Dba::read($sql);
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = Artist::construct_from_array($r);
         }
 
@@ -1039,7 +1039,7 @@ abstract class Catalog extends database_object
 
         $db_results = Dba::read($sql);
         $results    = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -1079,7 +1079,7 @@ abstract class Catalog extends database_object
 
         $db_results = Dba::read($sql);
         $results    = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -1099,7 +1099,7 @@ abstract class Catalog extends database_object
         $sql = 'SELECT `podcast`.`id` FROM `podcast` ';
         $sql .= 'WHERE `podcast`.`catalog` = ?';
         $db_results = Dba::read($sql, array($this->id));
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -1144,7 +1144,7 @@ abstract class Catalog extends database_object
                 'WHERE `podcast`.`catalog` = ? ' .
                 'ORDER BY `podcast_episode`.`pubdate` DESC';
         $db_results = Dba::read($sql, array($this->id));
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -1208,7 +1208,7 @@ abstract class Catalog extends database_object
                     $options['keyword'] = $keyword;
                 }
 
-                $parent = $libitem->get_parent();
+                $parent = $libitem->getParent();
                 if ($parent != null) {
                     if (!Art::has_db($parent['object_id'], $parent['object_type'])) {
                         $this->gather_art_item($parent['object_type'], $parent['object_id']);
@@ -1243,7 +1243,7 @@ abstract class Catalog extends database_object
         }
 
         if (UI::check_ticker()) {
-            UI::update_text('read_art_' . $this->id, $libitem->get_fullname());
+            UI::update_text('read_art_' . $this->id, $libitem->getFullname());
         }
     }
 
@@ -1325,7 +1325,7 @@ abstract class Catalog extends database_object
         $sql        = "SELECT `id` FROM `song` WHERE `catalog` = ? AND `enabled`='1'";
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $songs[] = $row['id'];
         }
 
@@ -1519,7 +1519,7 @@ abstract class Catalog extends database_object
      * update_media_from_tags
      * This is a 'wrapper' function calls the update function for the media
      * type in question
-     * @param \media $media
+     * @param \MediaInterface $media
      * @param string $sort_pattern
      * @param string $rename_pattern
      * @return array
@@ -1587,10 +1587,10 @@ abstract class Catalog extends database_object
         $new_song->mbid                  = $results['mb_trackid'];
         $new_song->label                 = $results['publisher'];
         $new_song->composer              = $results['composer'];
-        $new_song->replaygain_track_gain = floatval($results['replaygain_track_gain']);
-        $new_song->replaygain_track_peak = floatval($results['replaygain_track_peak']);
-        $new_song->replaygain_album_gain = floatval($results['replaygain_album_gain']);
-        $new_song->replaygain_album_peak = floatval($results['replaygain_album_peak']);
+        $new_song->replaygainTrackGain = floatval($results['replaygain_track_gain']);
+        $new_song->replaygainTrackPeak = floatval($results['replaygain_track_peak']);
+        $new_song->replaygainAlbumGain = floatval($results['replaygain_album_gain']);
+        $new_song->replaygainAlbumPeak = floatval($results['replaygain_album_peak']);
         $tags                            = Tag::get_object_tags('song', $song->id);
         if ($tags) {
             foreach ($tags as $tag) {
@@ -1725,11 +1725,11 @@ abstract class Catalog extends database_object
     
     /**
      * Get rid of all tags found in the libraryItem
-     * @param library_item $libraryItem
+     * @param LibraryItemInterface $libraryItem
      * @param array $metadata
      * @return array
      */
-    private static function get_clean_metadata(library_item $libraryItem, $metadata)
+    private static function get_clean_metadata(LibraryItemInterface $libraryItem, $metadata)
     {
         $tags = array_diff_key(
             $metadata,
@@ -1742,10 +1742,10 @@ abstract class Catalog extends database_object
 
     /**
      *
-     * @param library_item $libraryItem
+     * @param LibraryItemInterface $libraryItem
      * @param type $metadata
      */
-    public static function add_metadata(library_item $libraryItem, $metadata)
+    public static function add_metadata(LibraryItemInterface $libraryItem, $metadata)
     {
         $tags = self::get_clean_metadata($libraryItem, $metadata);
 
@@ -1864,8 +1864,8 @@ abstract class Catalog extends database_object
         Tag::gc();
         
         // TODO: use InnoDB with foreign keys and on delete cascade to get rid of garbage collection
-        \Lib\Metadata\Repository\Metadata::gc();
-        \Lib\Metadata\Repository\MetadataField::gc();
+        \Lib\Metadata\Repository\MetadataRepository::gc();
+        \Lib\Metadata\Repository\MetadataFieldRepository::gc();
         debug_event('catalog', 'Database cleanup ended', 5);
     }
 
@@ -1984,7 +1984,7 @@ abstract class Catalog extends database_object
                     // First, try to found the file as absolute path
                     $sql        = "SELECT `id` FROM `song` WHERE `file` = ?";
                     $db_results = Dba::read($sql, array($file));
-                    $results    = Dba::fetch_assoc($db_results);
+                    $results    = Dba::fetchAssoc($db_results);
 
                     if (isset($results['id'])) {
                         $songs[] = $results['id'];
@@ -1996,7 +1996,7 @@ abstract class Catalog extends database_object
                         if ($file) {
                             $sql        = "SELECT `id` FROM `song` WHERE `file` = ?";
                             $db_results = Dba::read($sql, array($file));
-                            $results    = Dba::fetch_assoc($db_results);
+                            $results    = Dba::fetchAssoc($db_results);
 
                             if (isset($results['id'])) {
                                 $songs[] = $results['id'];
@@ -2199,7 +2199,7 @@ abstract class Catalog extends database_object
         switch ($type) {
             case 'itunes':
                 echo xml_get_header('itunes');
-                while ($results = Dba::fetch_assoc($db_results)) {
+                while ($results = Dba::fetchAssoc($db_results)) {
                     $song = new Song($results['id']);
                     $song->format();
 
@@ -2226,7 +2226,7 @@ abstract class Catalog extends database_object
                 break;
             case 'csv':
                 echo "ID,Title,Artist,Album,Length,Track,Year,Date Added,Bitrate,Played,File\n";
-                while ($results = Dba::fetch_assoc($db_results)) {
+                while ($results = Dba::fetchAssoc($db_results)) {
                     $song = new Song($results['id']);
                     $song->format();
                     echo '"' . $song->id . '","' .
@@ -2280,7 +2280,7 @@ abstract class Catalog extends database_object
                         . ' JOIN `song` ON `tag_map`.`object_id` = `song`.`id`'
                         . ' WHERE `song`.`' . $type . '` = ? AND `tag_map`.`object_type` = "song"'
                         . ' GROUP BY `tag`.`id`, `tag`.`name`', array($id));
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $tags[] = $row['name'];
         }
         return $tags;

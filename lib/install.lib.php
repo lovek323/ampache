@@ -1,41 +1,22 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 /**
- * split_sql
  * splits up a standard SQL dump file into distinct sql queries
+ * @param $sql
+ * @return array
  */
 function split_sql($sql)
 {
-    $sql       = trim($sql);
-    $sql       = preg_replace("/\n#[^\n]*\n/", "\n", $sql);
-    $buffer    = array();
-    $ret       = array();
+    $sql = trim($sql);
+    $sql = preg_replace("/\n#[^\n]*\n/", "\n", $sql);
+    $buffer = [];
+    $ret = [];
     $in_string = false;
-    for ($i=0; $i<strlen($sql)-1; $i++) {
+    for ($i = 0; $i < strlen($sql) - 1; $i++) {
         if ($sql[$i] == ";" && !$in_string) {
             $ret[] = substr($sql, 0, $i);
-            $sql   = substr($sql, $i + 1);
-            $i     = 0;
+            $sql = substr($sql, $i + 1);
+            $i = 0;
         }
         if ($in_string && ($sql[$i] == $in_string) && $buffer[1] != "\\") {
             $in_string = false;
@@ -50,16 +31,16 @@ function split_sql($sql)
     if (!empty($sql)) {
         $ret[] = $sql;
     }
-    return($ret);
+    return ($ret);
 } // split_sql
 
 /**
- * install_check_status
- * this function checks to see if we actually
- * still need to install ampache. This function is
- * very important, we don't want to reinstall over top of an existing install
+ * This function checks to see if we actually still need to install ampache. This function is very important, we don't
+ * want to reinstall over top of an existing install
+ * @param $configfile
+ * @return bool
  */
-function install_check_status($configfile)
+function installCheckStatus($configfile)
 {
     /*
       Check and see if the config file exists
@@ -84,7 +65,7 @@ function install_check_status($configfile)
         return false;
     }
 
-    $sql        = 'SELECT * FROM `user`';
+    $sql = 'SELECT * FROM `user`';
     $db_results = Dba::read($sql);
 
     if (!$db_results) {
@@ -100,20 +81,29 @@ function install_check_status($configfile)
     }
 } // install_check_status
 
-function install_check_server_apache()
+/**
+ * @return bool
+ */
+function installCheckServerApache()
 {
     return (strpos($_SERVER['SERVER_SOFTWARE'], "Apache/") === 0);
 }
 
-function install_check_rewrite_rules($file, $web_path, $fix = false)
+/**
+ * @param $file
+ * @param $web_path
+ * @param bool $fix
+ * @return bool|string
+ */
+function installCheckRewriteRules($file, $web_path, $fix = false)
 {
     if (!is_readable($file)) {
         $file .= '.dist';
     }
-    $valid     = true;
-    $htaccess  = file_get_contents($file);
-    $new_lines = array();
-    $lines     = explode("\n", $htaccess);
+    $valid = true;
+    $htaccess = file_get_contents($file);
+    $new_lines = [];
+    $lines = explode("\n", $htaccess);
     foreach ($lines as $line) {
         $parts = explode(' ', $line);
         for ($i = 0; $i < count($parts); $i++) {
@@ -124,7 +114,7 @@ function install_check_rewrite_rules($file, $web_path, $fix = false)
                     $reprule = $web_path . $reprule;
                     if ($fix) {
                         $parts[$i + 2] = $reprule;
-                        $line          = implode(' ', $parts);
+                        $line = implode(' ', $parts);
                     } else {
                         $valid = false;
                     }
@@ -145,9 +135,15 @@ function install_check_rewrite_rules($file, $web_path, $fix = false)
     return $valid;
 }
 
-function install_rewrite_rules($file, $web_path, $download)
+/**
+ * @param $file
+ * @param $web_path
+ * @param $download
+ * @return bool
+ */
+function installRewriteRules($file, $web_path, $download)
 {
-    $final = install_check_rewrite_rules($file, $web_path, true);
+    $final = installCheckRewriteRules($file, $web_path, true);
     if (!$download) {
         if (!file_put_contents($file, $final)) {
             AmpError::add('general', T_('Error writing config file'));
@@ -167,9 +163,20 @@ function install_rewrite_rules($file, $web_path, $download)
  * install_insert_db
  *
  * Inserts the database using the values from Config.
+ * @param null $db_user
+ * @param null $db_pass
+ * @param bool $create_db
+ * @param bool $overwrite
+ * @param bool $create_tables
+ * @return bool
  */
-function install_insert_db($db_user = null, $db_pass = null, $create_db = true, $overwrite = false, $create_tables = true)
-{
+function install_insert_db(
+    $db_user = null,
+    $db_pass = null,
+    $create_db = true,
+    $overwrite = false,
+    $create_tables = true
+) {
     $database = AmpConfig::get('database_name');
     // Make sure that the database name is valid
     preg_match('/([^\d\w\_\-])/', $database, $matches);
@@ -207,7 +214,7 @@ function install_insert_db($db_user = null, $db_pass = null, $create_db = true, 
     // Check to see if we should create a user here
     if (strlen($db_user) && strlen($db_pass)) {
         $db_host = AmpConfig::get('database_hostname');
-        $sql     = 'GRANT ALL PRIVILEGES ON `' . Dba::escape($database) . '`.* TO ' .
+        $sql = 'GRANT ALL PRIVILEGES ON `' . Dba::escape($database) . '`.* TO ' .
             "'" . Dba::escape($db_user) . "'";
         if ($db_host == 'localhost' || strpos($db_host, '/') === 0) {
             $sql .= "@'localhost'";
@@ -221,14 +228,14 @@ function install_insert_db($db_user = null, $db_pass = null, $create_db = true, 
 
     if ($create_tables) {
         $sql_file = AmpConfig::get('prefix') . '/sql/ampache.sql';
-        $query    = fread(fopen($sql_file, 'r'), filesize($sql_file));
-        $pieces   = split_sql($query);
-        $errors   = array();
-        for ($i=0; $i<count($pieces); $i++) {
+        $query = fread(fopen($sql_file, 'r'), filesize($sql_file));
+        $pieces = split_sql($query);
+        $errors = [];
+        for ($i = 0; $i < count($pieces); $i++) {
             $pieces[$i] = trim($pieces[$i]);
             if (!empty($pieces[$i]) && $pieces[$i] != '#') {
                 if (!$result = Dba::write($pieces[$i])) {
-                    $errors[] = array ( Dba::error(), $pieces[$i] );
+                    $errors[] = [Dba::error(), $pieces[$i]];
                 }
             }
         }
@@ -243,9 +250,9 @@ function install_insert_db($db_user = null, $db_pass = null, $create_db = true, 
     if (AmpConfig::get('lang') != 'en_US') {
         // FIXME: 31? I hate magic.
         $sql = 'UPDATE `preference` SET `value`= ? WHERE `id` = 31';
-        Dba::write($sql, array(AmpConfig::get('lang')));
+        Dba::write($sql, [AmpConfig::get('lang')]);
         $sql = 'UPDATE `user_preference` SET `value` = ? WHERE `preference` = 31';
-        Dba::write($sql, array(AmpConfig::get('lang')));
+        Dba::write($sql, [AmpConfig::get('lang')]);
     }
 
     return true;
@@ -255,6 +262,8 @@ function install_insert_db($db_user = null, $db_pass = null, $create_db = true, 
  * install_create_config
  *
  * Attempts to write out the config file or offer it as a download.
+ * @param bool $download
+ * @return bool
  */
 function install_create_config($download = false)
 {
@@ -302,6 +311,10 @@ function install_create_config($download = false)
 /**
  * install_create_account
  * this creates your initial account and sets up the preferences for the -1 user and you
+ * @param $username
+ * @param $password
+ * @param $password2
+ * @return bool
  */
 function install_create_account($username, $password, $password2)
 {
@@ -328,7 +341,7 @@ function install_create_account($username, $password, $password2)
     $username = Dba::escape($username);
     $password = Dba::escape($password);
 
-    $insert_id = User::create($username,'Administrator','','',$password,'100');
+    $insert_id = User::create($username, 'Administrator', '', '', $password, '100');
 
     if (!$insert_id) {
         AmpError::add('general', sprintf(T_('Administrative user creation failed: %s'), Dba::error()));
@@ -339,22 +352,26 @@ function install_create_account($username, $password, $password2)
     User::fix_preferences('-1');
 
     return true;
-} // install_create_account
+}
 
-function command_exists($command)
+/**
+ * @param $command
+ * @return bool
+ */
+function commandExists($command)
 {
     if (!function_exists('proc_open')) {
         return false;
     }
 
     $whereIsCommand = (PHP_OS == 'WINNT') ? 'where' : 'which';
-    $process        = proc_open(
+    $process = proc_open(
         "$whereIsCommand $command",
-        array(
-            0 => array("pipe", "r"), //STDIN
-            1 => array("pipe", "w"), //STDOUT
-            2 => array("pipe", "w"), //STDERR
-        ),
+        [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ],
         $pipes
     );
 
@@ -372,26 +389,28 @@ function command_exists($command)
 }
 
 /**
- * install_get_transcode_modes
- * get transcode modes available on this machine.
+ * Get transcode modes available on this machine.
  */
-function install_get_transcode_modes()
+function installGetTranscodeModules()
 {
-    $modes = array();
+    $modes = [];
 
-    if (command_exists('ffmpeg')) {
+    if (commandExists('ffmpeg')) {
         $modes[] = 'ffmpeg';
     }
-    if (command_exists('avconv')) {
+    if (commandExists('avconv')) {
         $modes[] = 'avconv';
     }
 
     return $modes;
 } // install_get_transcode_modes
 
-function install_config_transcode_mode($mode)
+/**
+ * @param $mode
+ */
+function installConfigTranscodeMode($mode)
 {
-    $trconfig = array(
+    $trconfig = [
         'encode_target' => 'mp3',
         'encode_video_target' => 'webm',
         'transcode_m4a' => 'required',
@@ -402,20 +421,23 @@ function install_config_transcode_mode($mode)
         'transcode_avi' => 'allowed',
         'transcode_mpg' => 'allowed',
         'transcode_mkv' => 'allowed',
-    );
+    ];
     if ($mode == 'ffmpeg' || $mode == 'avconv') {
-        $trconfig['transcode_cmd']          = $mode;
-        $trconfig['transcode_input']        = '-i %FILE%';
-        $trconfig['waveform']               = 'true';
+        $trconfig['transcode_cmd'] = $mode;
+        $trconfig['transcode_input'] = '-i %FILE%';
+        $trconfig['waveform'] = 'true';
         $trconfig['generate_video_preview'] = 'true';
 
         AmpConfig::set_by_array($trconfig, true);
     }
 }
 
-function install_config_use_case($case)
+/**
+ * @param $case
+ */
+function installConfigUseCase($case)
 {
-    $trconfig = array(
+    $trconfig = [
         'use_auth' => 'true',
         'ratings' => 'true',
         'userflags' => 'true',
@@ -426,27 +448,27 @@ function install_config_use_case($case)
         'live_stream' => 'true',
         'allow_public_registration' => 'false',
         'cookie_disclaimer' => 'false',
-        'share' => 'false'
-    );
+        'share' => 'false',
+    ];
 
-    $dbconfig = array(
+    $dbconfig = [
         'download' => '1',
         'share' => '0',
         'allow_video' => '1',
         'home_now_playing' => '1',
-        'home_recently_played' => '1'
-    );
+        'home_recently_played' => '1',
+    ];
 
     switch ($case) {
         case 'minimalist':
-            $trconfig['ratings']     = 'false';
-            $trconfig['userflags']   = 'false';
-            $trconfig['sociable']    = 'false';
-            $trconfig['wanted']      = 'false';
-            $trconfig['channel']     = 'false';
+            $trconfig['ratings'] = 'false';
+            $trconfig['userflags'] = 'false';
+            $trconfig['sociable'] = 'false';
+            $trconfig['wanted'] = 'false';
+            $trconfig['channel'] = 'false';
             $trconfig['live_stream'] = 'false';
 
-            $dbconfig['download']    = '0';
+            $dbconfig['download'] = '0';
             $dbconfig['allow_video'] = '0';
 
             // Default local UI preferences to have a better 'minimalist first look'.
@@ -455,17 +477,17 @@ function install_config_use_case($case)
             setcookie('browse_artist_grid_view', 'false', time() + (30 * 24 * 60 * 60), '/');
             break;
         case 'community':
-            $trconfig['use_auth']                  = 'false';
-            $trconfig['licensing']                 = 'true';
-            $trconfig['wanted']                    = 'false';
-            $trconfig['live_stream']               = 'false';
+            $trconfig['use_auth'] = 'false';
+            $trconfig['licensing'] = 'true';
+            $trconfig['wanted'] = 'false';
+            $trconfig['live_stream'] = 'false';
             $trconfig['allow_public_registration'] = 'true';
-            $trconfig['cookie_disclaimer']         = 'true';
-            $trconfig['share']                     = 'true';
+            $trconfig['cookie_disclaimer'] = 'true';
+            $trconfig['share'] = 'true';
 
-            $dbconfig['download']             = '0';
-            $dbconfig['share']                = '1';
-            $dbconfig['home_now_playing']     = '0';
+            $dbconfig['download'] = '0';
+            $dbconfig['share'] = '1';
+            $dbconfig['home_now_playing'] = '0';
             $dbconfig['home_recently_played'] = '0';
             break;
         default:
@@ -478,16 +500,19 @@ function install_config_use_case($case)
     }
 }
 
-function install_config_backends(Array $backends)
+/**
+ * @param array $backends
+ */
+function installConfigBackends(Array $backends)
 {
-    $dbconfig = array(
+    $dbconfig = [
         'subsonic_backend' => '0',
         'plex_backend' => '0',
         'daap_backend' => '0',
         'upnp_backend' => '0',
         'webdav_backend' => '0',
-        'stream_beautiful_url' => '0'
-    );
+        'stream_beautiful_url' => '0',
+    ];
 
     foreach ($backends as $backend) {
         switch ($backend) {
@@ -498,7 +523,7 @@ function install_config_backends(Array $backends)
                 $dbconfig['plex_backend'] = '1';
                 break;
             case 'upnp':
-                $dbconfig['upnp_backend']         = '1';
+                $dbconfig['upnp_backend'] = '1';
                 $dbconfig['stream_beautiful_url'] = '1';
                 break;
             case 'daap':
@@ -514,3 +539,5 @@ function install_config_backends(Array $backends)
         Preference::update($preference, -1, $value, true, true);
     }
 }
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

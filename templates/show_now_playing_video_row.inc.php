@@ -50,7 +50,7 @@ $media->format();
             <div class="np_cell cel_albumart">
                 <?php
                     $release_art = $media->get_release_item_art();
-        Art::display($release_art['object_type'], $release_art['object_id'], $media->get_fullname(), 6, $media->link);
+        Art::display($release_art['object_type'], $release_art['object_id'], $media->getFullname(), 6, $media->link);
         ?>
             </div>
         </div>

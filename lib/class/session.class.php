@@ -147,7 +147,7 @@ class Session
         $sql        = 'SELECT * FROM `session` WHERE `id` = ? AND `expire` > ?';
         $db_results = Dba::read($sql, array($key, time()));
 
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             return $results[$column];
         }
 
@@ -391,7 +391,7 @@ class Session
         if ($sid) {
             $sql        = "SELECT `geo_latitude`, `geo_longitude`, `geo_name` FROM `session` WHERE `id` = ?";
             $db_results = Dba::read($sql, array($sid));
-            if ($row = Dba::fetch_assoc($db_results)) {
+            if ($row = Dba::fetchAssoc($db_results)) {
                 $location['latitude']  = $row['geo_latitude'];
                 $location['longitude'] = $row['geo_longitude'];
                 $location['name']      = $row['geo_name'];

@@ -78,8 +78,8 @@ abstract class Catalog extends \Catalog
 
     /**
      *
-     * @param \media $media
-     * @return \media
+     * @param \MediaInterface $media
+     * @return \MediaInterface
      */
     public function prepare_media($media)
     {
@@ -154,7 +154,7 @@ abstract class Catalog extends \Catalog
         }
     }
 
-    public function addMetadata(\library_item $libraryItem, $metadata)
+    public function addMetadata(\LibraryItemInterface $libraryItem, $metadata)
     {
         $tags = $this->getCleanMetadata($libraryItem, $metadata);
 
@@ -166,11 +166,11 @@ abstract class Catalog extends \Catalog
 
     /**
      * Get rid of all tags found in the libraryItem
-     * @param \library_item $libraryItem
+     * @param \LibraryItemInterface $libraryItem
      * @param array $metadata
      * @return array
      */
-    protected function getCleanMetadata(\library_item $libraryItem, $metadata)
+    protected function getCleanMetadata(\LibraryItemInterface $libraryItem, $metadata)
     {
         $tags = array_diff($metadata, get_object_vars($libraryItem));
         $keys = array_merge(
@@ -253,8 +253,8 @@ abstract class Catalog extends \Catalog
         $count = count($this->songs);
         $this->deleteSongs($this->songs);
         if (Song::isCustomMetadataEnabled()) {
-            \Lib\Metadata\Repository\Metadata::gc();
-            \Lib\Metadata\Repository\MetadataField::gc();
+            \Lib\Metadata\Repository\MetadataRepository::gc();
+            \Lib\Metadata\Repository\MetadataFieldRepository::gc();
         }
         $this->updateUi('clean', $this->cleanCounter, null, true);
         return $count;

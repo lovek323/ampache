@@ -65,15 +65,15 @@ switch ($type) {
 
 foreach ($items as $item) {
     $item->format();
-    $name = $item->get_fullname();
+    $name = $item->getFullname();
     // We don't know about file system encoding / specificity
     // For now, we only keep simple characters to be sure it will work everywhere
     $name = preg_replace('/[:]/', '.', $name);
     $name = preg_replace('/[^a-zA-Z0-9. -]/', '', $name);
     $filename = $dirname . DIRECTORY_SEPARATOR . $item->id . '. ' . $name . '.' . $ext;
-    $medias = $item->get_medias();
+    $medias = $item->getMedia();
     $pl = new Stream_Playlist(-1);
-    $pl->title = $item->get_fullname();
+    $pl->title = $item->getFullname();
     foreach ($medias as $media) {
         $pl->urls[] = Stream_Playlist::media_to_url($media, $dirname, 'file');
     }

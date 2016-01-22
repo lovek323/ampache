@@ -70,7 +70,7 @@ $web_path = AmpConfig::get('web_path');
         <div id="footer">
             <a href="http://www.ampache.org/index.php">Ampache v.<?php echo AmpConfig::get('version'); ?></a><br />
             Copyright (c) 2001 - 2015 Ampache.org <?php echo T_('Queries:'); ?><?php echo Dba::$stats['query']; ?>
-            <?php echo T_('Cache Hits:'); ?><?php echo database_object::$cache_hit; ?>
+            <?php echo T_('Cache Hits:'); ?><?php echo AbstractDatabaseObject::$cache_hit; ?>
         </div>
     </body>
 </html>

@@ -33,7 +33,7 @@ class WebDAV_Directory extends DAV\Collection
 {
     private $libitem;
 
-    public function __construct(library_item $libitem)
+    public function __construct(LibraryItemInterface $libitem)
     {
         $this->libitem = $libitem;
         $this->libitem->format();
@@ -43,7 +43,7 @@ class WebDAV_Directory extends DAV\Collection
     {
         debug_event('webdav', 'Directory getChildren', 5);
         $children = array();
-        $childs   = $this->libitem->get_childrens();
+        $childs   = $this->libitem->getChildren();
         foreach ($childs as $key => $child) {
             if (is_string($key)) {
                 foreach ($child as $schild) {
@@ -66,7 +66,7 @@ class WebDAV_Directory extends DAV\Collection
             $name      = $nameinfo['filename'];
         }
         debug_event('webdav', 'Directory getChild: ' . $name, 5);
-        $matches = $this->libitem->search_childrens($name);
+        $matches = $this->libitem->searchChildren($name);
         // Always return first match
         // Warning: this means that two items with the same name will not be supported for now
         if (count($matches) > 0) {
@@ -84,7 +84,7 @@ class WebDAV_Directory extends DAV\Collection
             throw new DAV\Exception\NotFound('The library item `' . $array['object_type'] . '` with id `' . $array['object_id'] . '` could not be found');
         }
 
-        if ($libitem instanceof media) {
+        if ($libitem instanceof MediaInterface) {
             return new WebDAV_File($libitem);
         } else {
             return new WebDAV_Directory($libitem);
@@ -93,12 +93,12 @@ class WebDAV_Directory extends DAV\Collection
 
     public function childExists($name)
     {
-        $matches = $this->libitem->search_childrens($name);
+        $matches = $this->libitem->searchChildren($name);
         return (count($matches) > 0);
     }
 
     public function getName()
     {
-        return $this->libitem->get_fullname();
+        return $this->libitem->getFullname();
     }
 }

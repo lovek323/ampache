@@ -233,7 +233,7 @@ function show_album_select($name='album', $album_id=0, $allow_add=false, $song_i
         echo "\t<option value=\"-2\"></option>\n";
     }
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected   = '';
         $album_name = trim($r['prefix'] . " " . $r['name']);
         if ($r['disk'] >= 1) {
@@ -289,7 +289,7 @@ function show_artist_select($name='artist', $artist_id=0, $allow_add=false, $son
         echo "\t<option value=\"-2\"></option>\n";
     }
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected    = '';
         $artist_name = trim($r['prefix'] . " " . $r['name']);
         if ($r['id'] == $artist_id) {
@@ -335,7 +335,7 @@ function show_tvshow_select($name='tvshow', $tvshow_id=0, $allow_add=false, $sea
     $sql        = "SELECT `id`, `name` FROM `tvshow` ORDER BY `name`";
     $db_results = Dba::read($sql);
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected = '';
         if ($r['id'] == $tvshow_id) {
             $selected = "selected=\"selected\"";
@@ -376,7 +376,7 @@ function show_tvshow_season_select($name='tvshow_season', $season_id, $allow_add
     $sql        = "SELECT `id`, `season_number` FROM `tvshow_season` WHERE `tvshow` = ? ORDER BY `season_number`";
     $db_results = Dba::read($sql, array($season->tvshow));
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected = '';
         if ($r['id'] == $season_id) {
             $selected = "selected=\"selected\"";
@@ -415,7 +415,7 @@ function show_catalog_select($name='catalog', $catalog_id=0, $style='', $allow_n
         echo "\t<option value=\"-1\">" . T_('None') . "</option>\n";
     }
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected = '';
         if ($r['id'] == $catalog_id) {
             $selected = "selected=\"selected\"";
@@ -449,7 +449,7 @@ function show_license_select($name='license',$license_id=0,$song_id=0)
     $sql        = "SELECT `id`, `name` FROM `license` ORDER BY `name`";
     $db_results = Dba::read($sql);
 
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $selected = '';
         if ($r['id'] == $license_id) {
             $selected = "selected=\"selected\"";
@@ -474,7 +474,7 @@ function show_user_select($name,$selected='',$style='')
     $sql        = "SELECT `id`,`username`,`fullname` FROM `user` ORDER BY `fullname`";
     $db_results = Dba::read($sql);
 
-    while ($row = Dba::fetch_assoc($db_results)) {
+    while ($row = Dba::fetchAssoc($db_results)) {
         $select_txt = '';
         if ($row['id'] == $selected) {
             $select_txt = 'selected="selected"';
@@ -503,7 +503,7 @@ function show_playlist_select($name,$selected='',$style='')
     $index            = 1;
     $already_selected = false;
 
-    while ($row = Dba::fetch_assoc($db_results)) {
+    while ($row = Dba::fetchAssoc($db_results)) {
         $select_txt = '';
         if (!$already_selected && ($row['id'] == $selected || $index == $nb_items)) {
             $select_txt       = 'selected="selected"';

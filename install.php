@@ -27,7 +27,7 @@ require_once $prefix . '/lib/install.lib.php';
 set_error_handler('ampache_error_handler');
 
 // Redirect if installation is already complete.
-if (!install_check_status($configfile)) {
+if (!installCheckStatus($configfile)) {
     $redirect_url = 'login.php';
     require_once AmpConfig::get('prefix') . UI::find_template('error_page.inc.php');
     exit;
@@ -63,20 +63,20 @@ if (!$skip_admin) {
 
 if (isset($_REQUEST['transcode_template'])) {
     $mode = $_REQUEST['transcode_template'];
-    install_config_transcode_mode($mode);
+    installConfigTranscodeMode($mode);
 }
 
 if (isset($_REQUEST['usecase'])) {
     $case = $_REQUEST['usecase'];
     if (Dba::check_database()) {
-        install_config_use_case($case);
+        installConfigUseCase($case);
     }
 }
 
 if (isset($_REQUEST['backends'])) {
     $backends = $_REQUEST['backends'];
     if (Dba::check_database()) {
-        install_config_backends($backends);
+        installConfigBackends($backends);
     }
 }
 
@@ -152,13 +152,13 @@ switch ($_REQUEST['action']) {
 
             $created_config = true;
             if ($write_htaccess_channel || $download_htaccess_channel || $all) {
-                $created_config = $created_config && install_rewrite_rules($htaccess_channel_file, $_POST['web_path'], $download_htaccess_channel);
+                $created_config = $created_config && installRewriteRules($htaccess_channel_file, $_POST['web_path'], $download_htaccess_channel);
             }
             if ($write_htaccess_rest || $download_htaccess_rest || $all) {
-                $created_config = $created_config && install_rewrite_rules($htaccess_rest_file, $_POST['web_path'], $download_htaccess_rest);
+                $created_config = $created_config && installRewriteRules($htaccess_rest_file, $_POST['web_path'], $download_htaccess_rest);
             }
             if ($write_htaccess_play || $download_htaccess_play || $all) {
-                $created_config = $created_config && install_rewrite_rules($htaccess_play_file, $_POST['web_path'], $download_htaccess_play);
+                $created_config = $created_config && installRewriteRules($htaccess_play_file, $_POST['web_path'], $download_htaccess_play);
             }
             if ($write || $download || $all) {
                 $created_config = $created_config && install_create_config($download);
@@ -178,7 +178,7 @@ switch ($_REQUEST['action']) {
         }
 
         // Don't try to add administrator user on existing database
-        if (install_check_status($configfile)) {
+        if (installCheckStatus($configfile)) {
             require_once AmpConfig::get('prefix') . UI::find_template('show_install_account.inc.php');
         } else {
             header ("Location: " . $web_path . '/login.php');

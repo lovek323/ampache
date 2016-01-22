@@ -35,10 +35,10 @@ if ($videos) {
             <?php if (Art::is_enabled()) {
     $release_art = $video->get_release_item_art();
     $thumb       = UI::is_grid_view('video') ? 6 : 7;
-    Art::display($release_art['object_type'], $release_art['object_id'], $video->get_fullname(), $thumb, $video->link);
+    Art::display($release_art['object_type'], $release_art['object_id'], $video->getFullname(), $thumb, $video->link);
 } else {
     ?>
-                <?php echo $video->get_fullname();
+                <?php echo $video->getFullname();
     ?>
             <?php 
 }

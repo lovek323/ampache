@@ -40,7 +40,7 @@ function update_preferences($pref_id=0)
 
     $results = array();
     // Collect the current possible keys
-    while ($r = Dba::fetch_assoc($db_results)) {
+    while ($r = Dba::fetchAssoc($db_results)) {
         $results[] = array('id' => $r['id'], 'name' => $r['name'],'type' => $r['type']);
     } // end collecting keys
 
@@ -383,7 +383,7 @@ function create_preference_input($name,$value)
         case 'disabled_custom_metadata_fields':
             $ids             = explode(',', $value);
             $options         = array();
-            $fieldRepository = new \Lib\Metadata\Repository\MetadataField();
+            $fieldRepository = new \Lib\Metadata\Repository\MetadataFieldRepository();
             foreach ($fieldRepository->findAll() as $field) {
                 $selected  = in_array($field->getId(), $ids) ? ' selected="selected"' : '';
                 $options[] = '<option value="' . $field->getId() . '"' . $selected . '>' . $field->getName() . '</option>';

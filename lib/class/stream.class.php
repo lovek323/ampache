@@ -392,7 +392,7 @@ class Stream
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $type  = $row['object_type'];
             $media = new $type($row['object_id']);
             $media->format();

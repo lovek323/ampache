@@ -111,7 +111,7 @@ class Mailer
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array('id'=>$row['id'],'fullname'=>$row['fullname'],'email'=>$row['email']);
         }
 

@@ -1,5 +1,6 @@
 <?php
 /* vim:set softtabstop=4 shiftwidth=4 expandtab: */
+
 /**
  *
  * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
@@ -19,19 +20,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 class Plugin
 {
     /* Base Variables */
     public $name;
 
-    /* constructed objects */
+    /* @var ChartLyrics|LyricWiki */
     public $_plugin;
 
     /**
      * Constructor
      * This constructor loads the Plugin config file which defines how to
      * install/uninstall the plugin from Ampache's database
+     * @param $name
      */
     public function __construct($name)
     {
@@ -48,6 +49,8 @@ class Plugin
      * _get_info
      * This actually loads the config file for the plugin the name of the
      * class contained within the config file must be Plugin[NAME OF FILE]
+     * @param $cname
+     * @return bool
      */
     public function _get_info($cname)
     {
@@ -58,14 +61,14 @@ class Plugin
             } else {
                 $name = 'ampache-' . strtolower($cname);
             }
-            
+
             /* Require the file we want */
-            if (!@include_once($basedir . '/' . $name . '/' . $cname . '.plugin.php')) {
+            if (!include_once($basedir . '/' . $name . '/' . $cname . '.plugin.php')) {
                 debug_event('plugin', 'Cannot include plugin `' . $cname . '`.', 1);
                 return false;
             }
 
-            $plugin_name   = "Ampache$cname";
+            $plugin_name = "Ampache$cname";
             $this->_plugin = new $plugin_name();
 
             if (!$this->is_valid()) {
@@ -82,23 +85,25 @@ class Plugin
     /**
      * get_plugins
      * This returns an array of plugin names
+     * @param string $type
+     * @return
      */
-    public static function get_plugins($type='')
+    public static function get_plugins($type = '')
     {
         // make static cache for optimization when multiple call
-        static $plugins_list = array();
+        static $plugins_list = [];
         if (isset($plugins_list[$type])) {
             return $plugins_list[$type];
         }
 
-        $plugins_list[$type] = array();
+        $plugins_list[$type] = [];
 
         // Open up the plugin dir
         $basedir = AmpConfig::get('prefix') . '/modules/plugins';
-        $handle  = opendir($basedir);
+        $handle = opendir($basedir);
 
         if (!is_resource($handle)) {
-            debug_event('Plugins','Unable to read plugins directory','1');
+            debug_event('Plugins', 'Unable to read plugins directory', '1');
         }
 
         // Recurse the directory
@@ -111,31 +116,31 @@ class Plugin
                 debug_event('Plugins', $file . ' is not a directory.', 3);
                 continue;
             }
-            
+
             // If directory name start with ampache-, this is an external plugin and some parsing is required
             if (strpos($file, "ampache-") === 0) {
                 $cfile = ucfirst(substr($file, 8));
             } else {
                 $cfile = $file;
             }
-            
+
             // Make sure the plugin base file exists inside the plugin directory
-            if (! file_exists($basedir . '/' . $file . '/' . $cfile . '.plugin.php')) {
+            if (!file_exists($basedir . '/' . $file . '/' . $cfile . '.plugin.php')) {
                 debug_event('Plugins', 'Missing class for ' . $cfile, 3);
                 continue;
             }
-            
+
             if ($type != '') {
                 $plugin = new Plugin($cfile);
-                if (! Plugin::is_installed($plugin->_plugin->name)) {
+                if (!Plugin::is_installed($plugin->_plugin->name)) {
                     debug_event('Plugins', 'Plugin ' . $plugin->_plugin->name . ' is not installed, skipping', 6);
                     continue;
                 }
-                if (! $plugin->is_valid()) {
+                if (!$plugin->is_valid()) {
                     debug_event('Plugins', 'Plugin ' . $cfile . ' is not valid, skipping', 6);
                     continue;
                 }
-                if (! method_exists($plugin->_plugin, $type)) {
+                if (!method_exists($plugin->_plugin, $type)) {
                     debug_event('Plugins', 'Plugin ' . $cfile . ' does not support ' . $type . ', skipping', 6);
                     continue;
                 }
@@ -172,15 +177,15 @@ class Plugin
         }
 
         /* Make sure we've got the required methods */
-        if (!method_exists($this->_plugin,'install')) {
+        if (!method_exists($this->_plugin, 'install')) {
             return false;
         }
 
-        if (!method_exists($this->_plugin,'uninstall')) {
+        if (!method_exists($this->_plugin, 'uninstall')) {
             return false;
         }
 
-        if (!method_exists($this->_plugin,'load')) {
+        if (!method_exists($this->_plugin, 'load')) {
             return false;
         }
 
@@ -203,6 +208,8 @@ class Plugin
      * is_installed
      * This checks to see if the specified plugin is currently installed in
      * the database, it doesn't check the files for integrity
+     * @param $plugin_name
+     * @return bool
      */
     public static function is_installed($plugin_name)
     {
@@ -218,7 +225,8 @@ class Plugin
     public function install()
     {
         if ($this->_plugin->install() &&
-            $this->set_plugin_version($this->_plugin->version)) {
+            $this->set_plugin_version($this->_plugin->version)
+        ) {
             return true;
         }
 
@@ -252,10 +260,11 @@ class Plugin
     } // upgrade
 
     /**
-     * load
      * This calls the plugin's load function
+     * @param User $user
+     * @return bool
      */
-    public function load($user)
+    public function load(User $user)
     {
         $user->set_preferences();
         return $this->_plugin->load($user);
@@ -264,15 +273,17 @@ class Plugin
     /**
      * get_plugin_version
      * This returns the version of the specified plugin
+     * @param $plugin_name
+     * @return bool
      */
     public static function get_plugin_version($plugin_name)
     {
         $name = Dba::escape('Plugin_' . $plugin_name);
 
-        $sql        = "SELECT * FROM `update_info` WHERE `key` = ?";
-        $db_results = Dba::read($sql, array($name));
+        $sql = "SELECT * FROM `update_info` WHERE `key` = ?";
+        $db_results = Dba::read($sql, [$name]);
 
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             return $results['value'];
         }
 
@@ -285,10 +296,10 @@ class Plugin
      */
     public function get_ampache_db_version()
     {
-        $sql        = "SELECT * FROM `update_info` WHERE `key`='db_version'";
+        $sql = "SELECT * FROM `update_info` WHERE `key`='db_version'";
         $db_results = Dba::read($sql);
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['value'];
     } // get_ampache_db_version
@@ -296,11 +307,13 @@ class Plugin
     /**
      * set_plugin_version
      * This sets the plugin version in the update_info table
+     * @param $version
+     * @return bool
      */
     public function set_plugin_version($version)
     {
-        $name         = Dba::escape('Plugin_' . $this->_plugin->name);
-        $version      = Dba::escape($version);
+        $name = Dba::escape('Plugin_' . $this->_plugin->name);
+        $version = Dba::escape($version);
 
         $sql = "REPLACE INTO `update_info` SET `key`='$name', `value`='$version'";
         Dba::write($sql);
@@ -309,12 +322,12 @@ class Plugin
     } // set_plugin_version
 
     /**
-      * remove_plugin_version
+     * remove_plugin_version
      * This removes the version row from the db done on uninstall
      */
     public function remove_plugin_version()
     {
-        $name    = Dba::escape('Plugin_' . $this->_plugin->name);
+        $name = Dba::escape('Plugin_' . $this->_plugin->name);
 
         $sql = "DELETE FROM `update_info` WHERE `key`='$name'";
         Dba::write($sql);

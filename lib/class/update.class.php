@@ -74,7 +74,7 @@ class Update
             // If we've found the update_info table, let's get the version from it
             $sql        = "SELECT * FROM `update_info` WHERE `key`='db_version'";
             $db_results = Dba::read($sql);
-            $results    = Dba::fetch_assoc($db_results);
+            $results    = Dba::fetchAssoc($db_results);
             $version    = $results['value'];
         }
 
@@ -705,7 +705,7 @@ class Update
         $sql        = "SELECT * FROM album";
         $db_results = Dba::write($sql);
 
-        while ($data = Dba::fetch_assoc($db_results)) {
+        while ($data = Dba::fetchAssoc($db_results)) {
             $id       = $data['id'];
             $art      = Dba::escape($data['art']);
             $art_mime = Dba::escape($data['art_mime']);
@@ -1068,7 +1068,7 @@ class Update
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row;
         }
 
@@ -1222,7 +1222,7 @@ class Update
 
         $ip_history = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $row['ip']    = long2ip($row['ip']);
             $ip_history[] = $row;
         }
@@ -1251,7 +1251,7 @@ class Update
 
         $acl_information = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $row['start']      = long2ip($row['start']);
             $row['end']        = long2ip($row['end']);
             $acl_information[] = $row;
@@ -1573,7 +1573,7 @@ class Update
                 "`art`, `art_mime` FROM `" . $type .
                 "_data` WHERE `art` IS NOT NULL";
             $db_results = Dba::read($sql);
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $sql = "INSERT INTO `image` " .
                     "(`image`, `mime`, `size`, " .
                     "`object_type`, `object_id`) " .
@@ -1659,7 +1659,7 @@ class Update
         $sql        = "DESCRIBE `catalog`";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             if ($row['Field'] == 'remote_username') {
                 $remote_username = true;
             }
@@ -1884,7 +1884,7 @@ class Update
         $c = Catalog::create_catalog_type('remote');
         $c->install();
 
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             if ($results['catalog_type'] == 'local') {
                 $sql    = "INSERT INTO `catalog_local` (`path`, `catalog_id`) VALUES (?, ?)";
                 $retval &= Dba::write($sql, array($results['path'], $results['id']));
@@ -2596,7 +2596,7 @@ class Update
     {
         require_once AmpConfig::get('prefix') . '/lib/install.lib.php';
 
-        if (!install_check_server_apache()) {
+        if (!installCheckServerApache()) {
             debug_event('update', 'Not using Apache, update 360051 skipped.', '5');
             return true;
         }
@@ -2609,7 +2609,7 @@ class Update
         if (!is_readable($htaccess_play_file)) {
             $created = false;
             if (check_htaccess_play_writable()) {
-                if (!install_rewrite_rules($htaccess_play_file, AmpConfig::get('raw_web_path'), false)) {
+                if (!installRewriteRules($htaccess_play_file, AmpConfig::get('raw_web_path'), false)) {
                     AmpError::add('general', T_('File copy error.'));
                 } else {
                     $created = true;
@@ -2625,7 +2625,7 @@ class Update
         if (!is_readable($htaccess_rest_file)) {
             $created = false;
             if (check_htaccess_rest_writable()) {
-                if (!install_rewrite_rules($htaccess_rest_file, AmpConfig::get('raw_web_path'), false)) {
+                if (!installRewriteRules($htaccess_rest_file, AmpConfig::get('raw_web_path'), false)) {
                     AmpError::add('general', T_('File copy error.'));
                 } else {
                     $created = true;
@@ -2641,7 +2641,7 @@ class Update
         if (!is_readable($htaccess_channel_file)) {
             $created = false;
             if (check_htaccess_channel_writable()) {
-                if (!install_rewrite_rules($htaccess_channel_file, AmpConfig::get('raw_web_path'), false)) {
+                if (!installRewriteRules($htaccess_channel_file, AmpConfig::get('raw_web_path'), false)) {
                     AmpError::add('general', T_('File copy error.'));
                 } else {
                     $created = true;

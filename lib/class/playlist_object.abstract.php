@@ -24,7 +24,7 @@
  * playlist_object
  * Abstracting out functionality needed by both normal and smart playlists
  */
-abstract class playlist_object extends database_object implements library_item
+abstract class playlist_objectAbstract extends AbstractDatabaseObject implements LibraryItemInterface
 {
     // Database variables
     /**
@@ -93,13 +93,13 @@ abstract class playlist_object extends database_object implements library_item
         }
     } // has_access
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = $this->get_items();
-        if ($filter_type) {
+        if ($filterType) {
             $nmedias = array();
             foreach ($medias as $media) {
-                if ($media['object_type'] == $filter_type) {
+                if ($media['object_type'] == $filterType) {
                     $nmedias[] = $media;
                 }
             }
@@ -113,17 +113,17 @@ abstract class playlist_object extends database_object implements library_item
         return array();
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_name;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         $childrens = array();
         $items     = $this->get_items();
@@ -137,7 +137,7 @@ abstract class playlist_object extends database_object implements library_item
         return $this->get_items();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
@@ -168,7 +168,7 @@ abstract class playlist_object extends database_object implements library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array();
     }

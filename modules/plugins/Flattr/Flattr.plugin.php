@@ -86,9 +86,9 @@ class AmpacheFlattr
      * display_user_field
      * This display the module in user page
      */
-    public function display_user_field(library_item $libitem = null)
+    public function display_user_field(LibraryItemInterface $libitem = null)
     {
-        $name = ($libitem != null) ? $libitem->get_fullname() : (T_('User') . " `" . $this->user->fullname . "` " . T_('on') . " " . AmpConfig::get('site_title'));
+        $name = ($libitem != null) ? $libitem->getFullname() : (T_('User') . " `" . $this->user->fullname . "` " . T_('on') . " " . AmpConfig::get('site_title'));
         $link = ($libitem != null && $libitem->link) ? $libitem->link : $this->user->link;
 
         echo "<a rel='nohtml' href='https://flattr.com/submit/auto?user_id=" . scrub_out($this->user_id) . "&url=" . rawurlencode($link) . "&category=audio&title=" . rawurlencode($name) . "' target='_blank'><img src='//button.flattr.com/flattr-badge-large.png' alt='Flattr this' title='Flattr this' border='0'></a>";

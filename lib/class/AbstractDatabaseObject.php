@@ -1,49 +1,27 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 namespace Lib;
 
-/**
- * Description of Model
- *
- * @author raziel
- */
-abstract class DatabaseObject
+abstract class AbstractDatabaseObject
 {
     protected $id;
-    //private $originalData;
 
     /**
-     *
      * @var array Stores relation between SQL field name and class name so we
      * can initialize objects the right way
      */
-    protected $fieldClassRelations = array();
+    protected $fieldClassRelations = [];
 
+    /** @var object */
+    private $originalData;
+
+    /**
+     * AbstractDatabaseObject constructor.
+     */
     public function __construct()
     {
         $this->remapCamelcase();
         $this->initializeChildObjects();
-        //$this->originalData = get_object_vars($this);
     }
 
     public function getId()
@@ -51,6 +29,10 @@ abstract class DatabaseObject
         return $this->id;
     }
 
+    /**
+     * @param $property
+     * @return bool
+     */
     protected function isPropertyDirty($property)
     {
         return $this->originalData->$property !== $this->$property;
@@ -92,7 +74,7 @@ abstract class DatabaseObject
     
     protected function fromCamelCase($properties)
     {
-        $data = array();
+        $data = [];
         foreach ($properties as $propertie => $value) {
             $newPropertyKey        = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $propertie));
             $data[$newPropertyKey] = $value;
@@ -115,3 +97,5 @@ abstract class DatabaseObject
         }
     }
 }
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

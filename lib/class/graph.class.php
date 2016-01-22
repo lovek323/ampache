@@ -199,7 +199,7 @@ class Graph
         $db_results = Dba::read($sql);
 
         $values = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $values[$results['zoom_date']] = $results['hits'];
         }
         return $values;
@@ -215,7 +215,7 @@ class Graph
         $db_results = Dba::read($sql);
 
         $values = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $values[$results['zoom_date']] = $results['total'];
         }
         return $values;
@@ -241,7 +241,7 @@ class Graph
         $db_results = Dba::read($sql);
 
         $values = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $values[$results['zoom_date']] = $results['files'];
         }
         return $values;
@@ -257,7 +257,7 @@ class Graph
         $db_results = Dba::read($sql);
 
         $values = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $values[$results['zoom_date']] = $results['storage'];
         }
         return $values;
@@ -275,7 +275,7 @@ class Graph
                 $where . " AND `geo_latitude` IS NOT NULL AND `geo_longitude` IS NOT NULL " .
                 "GROUP BY `geo_latitude`, `geo_longitude` ORDER BY `last_date` DESC";
         $db_results = Dba::read($sql);
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $pts[] = array(
                 'latitude' => $results['geo_latitude'],
                 'longitude' => $results['geo_longitude'],

@@ -57,7 +57,7 @@ class Shoutbox
         $sql        = "SELECT * FROM `user_shout` WHERE `id` = ?";
         $db_results = Dba::read($sql, array($shout_id));
 
-        $data = Dba::fetch_assoc($db_results);
+        $data = Dba::fetchAssoc($db_results);
 
         foreach ($data as $key=>$value) {
             $this->$key = $value;
@@ -115,7 +115,7 @@ class Shoutbox
         $sql .= "ORDER BY `user_shout`.`date` DESC LIMIT " . $limit;
         $db_results = Dba::read($sql, $params);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $shouts[] = $row['id'];
         }
 
@@ -128,7 +128,7 @@ class Shoutbox
         $db_results = Dba::read($sql, array($time));
 
         $shouts = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $shouts[] = $row['id'];
         }
 
@@ -146,7 +146,7 @@ class Shoutbox
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -340,7 +340,7 @@ class Shoutbox
         $db_results = Dba::read($sql, array($object_type, $object_id));
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

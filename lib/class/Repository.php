@@ -1,44 +1,23 @@
 <?php
 /* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 namespace Lib;
 
+use Dba;
 use Lib\Interfaces\Model;
 
 /**
- * Description of Repository
- *
- * @author raziel
+ * @method array findByObjectIdAndType($id, $type)
  */
 class Repository
 {
     protected $modelClassName;
     
     /**
-     *
      * @var array Stores relation between SQL field name and class name so we
      * can initialize objects the right way
      */
-    protected $fieldClassRelations = array();
+    protected $fieldClassRelations = [];
 
     protected function findBy($fields, $values)
     {
@@ -47,8 +26,7 @@ class Repository
     }
 
     /**
-     *
-     * @return DatabaseObject[]
+     * @return AbstractDatabaseObject[]
      */
     public function findAll()
     {
@@ -58,42 +36,42 @@ class Repository
 
     /**
      *
-     * @param type $id
-     * @return DatabaseObject
+     * @param $id
+     * @return AbstractDatabaseObject
      */
     public function findById($id)
     {
-        $rows = $this->findBy(array('id'), array($id));
+        $rows = $this->findBy(['id'], [$id]);
         return count($rows) ? reset($rows) : null;
     }
 
     private function getRecords($table, $field = null, $value = null)
     {
-        $data = array();
+        $data = [];
         $sql  = $this->assembleQuery($table, $field);
 
-        $statement = \Dba::read($sql, is_array($value) ? $value : array($value));
-        while ($object = \Dba::fetch_object($statement, $this->modelClassName)) {
+        $statement = Dba::read($sql, is_array($value) ? $value : [$value]);
+        while ($object = Dba::fetch_object($statement, $this->modelClassName)) {
             $data[$object->getId()] = $object;
         }
         return $data;
     }
 
     /**
-     *
      * @param string $name
      * @param array $arguments
-     * @return DatabaseObject
+     * @return AbstractDatabaseObject|null
      */
     public function __call($name, $arguments)
     {
         if (preg_match('/^findBy(.*)$/', $name, $matches)) {
-            $parts = explode('And', $matches[1]);
+            $parts = explode('AND', $matches[1]);
             return $this->findBy(
                     $parts,
                     $this->resolveObjects($arguments)
             );
         }
+        return null;
     }
 
     private function getTableName()
@@ -108,7 +86,7 @@ class Repository
         return lcfirst($tableName);
     }
 
-    public function add(DatabaseObject $object)
+    public function add(AbstractDatabaseObject $object)
     {
         $properties = $object->getDirtyProperties();
         $this->setPrivateProperty(
@@ -118,7 +96,7 @@ class Repository
         );
     }
 
-    public function update(DatabaseObject $object)
+    public function update(AbstractDatabaseObject $object)
     {
         if ($object->isDirty()) {
             $properties = $object->getDirtyProperties();
@@ -126,7 +104,7 @@ class Repository
         }
     }
 
-    public function remove(DatabaseObject $object)
+    public function remove(AbstractDatabaseObject $object)
     {
         $id = $object->getId();
         $this->deleteRecord($id);
@@ -136,12 +114,8 @@ class Repository
     {
         $sql = 'INSERT INTO ' . $this->getTableName() . ' (' . implode(',', array_keys($properties)) . ')'
                 . ' VALUES(' . implode(',', array_fill(0, count($properties), '?')) . ')';
-        //print_r($properties);
-        \Dba::write(
-                $sql,
-                array_values($this->resolveObjects($properties))
-        );
-        return \Dba::insert_id();
+        Dba::write($sql, array_values($this->resolveObjects($properties)));
+        return Dba::insert_id();
     }
 
     protected function updateRecord($id, $properties)
@@ -150,7 +124,7 @@ class Repository
                 . ' SET ' . implode(',', $this->getKeyValuePairs($properties))
                 . ' WHERE id = ?';
         $properties[] = $id;
-        \Dba::write(
+        Dba::write(
                 $sql,
                 array_values($this->resolveObjects($properties))
         );
@@ -160,12 +134,12 @@ class Repository
     {
         $sql = 'DELETE FROM ' . $this->getTableName()
                 . ' WHERE id = ?';
-        \Dba::write($sql, array($id));
+        Dba::write($sql, [$id]);
     }
 
     protected function getKeyValuePairs($properties)
     {
-        $pairs = array();
+        $pairs = [];
         foreach ($properties as $property => $value) {
             $pairs[] = $property . '= ?';
         }
@@ -175,11 +149,11 @@ class Repository
     /**
      * Set a private or protected variable.
      * Only used in case where a property should not publicly writable
-     * @param Object $object
+     * @param AbstractDatabaseObject $object
      * @param string $property
      * @param mixed $value
      */
-    protected function setPrivateProperty(Model $object, $property, $value)
+    protected function setPrivateProperty(AbstractDatabaseObject $object, $property, $value)
     {
         $reflectionClass    = new \ReflectionClass(get_class($object));
         $ReflectionProperty = $reflectionClass->getProperty($property);
@@ -189,7 +163,7 @@ class Repository
 
     /**
      * Resolve all objects into id's
-     * @param array $properties
+     * @param Model[] $properties
      * @return array
      */
     protected function resolveObjects(array $properties)
@@ -213,7 +187,7 @@ class Repository
         $sql = 'SELECT * FROM ' . $table;
         if ($fields) {
             $sql .= ' WHERE ';
-            $sqlParts = array();
+            $sqlParts = [];
             foreach ($fields as $field) {
                 $sqlParts[] = '`' . $this->camelCaseToUnderscore($field) . '` = ?';
             }

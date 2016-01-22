@@ -81,7 +81,7 @@ class Democratic extends Tmp_Playlist
 
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('democratic_vote', $row['object_id'], $row['count']);
         }
 
@@ -113,7 +113,7 @@ class Democratic extends Tmp_Playlist
         $sql        = "SELECT * FROM `tmp_playlist` WHERE `session`='$demo_id'";
         $db_results = Dba::read($sql);
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         $this->tmp_playlist = $row['id'];
     } // set_parent
@@ -184,7 +184,7 @@ class Democratic extends Tmp_Playlist
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -205,7 +205,7 @@ class Democratic extends Tmp_Playlist
             $sql   = "SELECT `id` FROM `democratic` WHERE `level` <= '$level' " .
                 " ORDER BY `level` DESC,`primary` DESC";
             $db_results    = Dba::read($sql);
-            $row           = Dba::fetch_assoc($db_results);
+            $row           = Dba::fetchAssoc($db_results);
             $democratic_id = $row['id'];
         }
 
@@ -249,7 +249,7 @@ class Democratic extends Tmp_Playlist
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             if ($row['id']) {
                 $results[] = $row;
             }
@@ -298,7 +298,7 @@ class Democratic extends Tmp_Playlist
         } else {
             $sql        = "SELECT `id` FROM `song` WHERE `enabled`='1' ORDER BY RAND() LIMIT 1";
             $db_results = Dba::read($sql);
-            $results    = Dba::fetch_assoc($db_results);
+            $results    = Dba::fetchAssoc($db_results);
             return $results['id'];
         }
     } // get_next_object
@@ -318,7 +318,7 @@ class Democratic extends Tmp_Playlist
             "`tmp_playlist`='$tmp_id' AND `object_id`='$object_id'";
         $db_results = Dba::read($sql);
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row['id'];
     } // get_uid_from_object_id
@@ -408,7 +408,7 @@ class Democratic extends Tmp_Playlist
         $db_results = Dba::write($sql, array($object_id, $this->tmp_playlist));
 
         /* If it's not there, add it and pull ID */
-        if (!$results = Dba::fetch_assoc($db_results)) {
+        if (!$results = Dba::fetchAssoc($db_results)) {
             $sql = "INSERT INTO `tmp_playlist_data` (`tmp_playlist`,`object_id`,`object_type`,`track`) " .
                 "VALUES (?, ?, ?, ?)";
             Dba::write($sql, array($this->tmp_playlist, $object_id, $object_type, $track));
@@ -622,7 +622,7 @@ class Democratic extends Tmp_Playlist
             "WHERE `object_id` = ?";
         $db_results = Dba::read($sql, array($id));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
         parent::add_to_cache('democratic_vote', $id, $results['count']);
         return $results['count'];
     } // get_vote
@@ -642,7 +642,7 @@ class Democratic extends Tmp_Playlist
         $db_results = Dba::read($sql, array($object_id));
 
         $voters = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $voters[] = $results['user'];
         }
         parent::add_to_cache('democratic_vote', $object_id, $voters);

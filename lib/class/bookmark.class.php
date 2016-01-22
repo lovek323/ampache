@@ -26,7 +26,7 @@
  * This manage bookmark on playable items
  *
  */
-class Bookmark extends database_object
+class Bookmark extends AbstractDatabaseObject
 {
     // Public variables
     public $id;
@@ -65,7 +65,7 @@ class Bookmark extends database_object
                 return false;
             }
 
-            $info = Dba::fetch_assoc($db_results);
+            $info = Dba::fetchAssoc($db_results);
         }
         
         // Foreach what we've got
@@ -108,7 +108,7 @@ class Bookmark extends database_object
         
         $sql        = "SELECT `id` FROM `bookmark` WHERE `user` = ?";
         $db_results = Dba::read($sql, array($user->id));
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $ids[] = $results['id'];
         }
         

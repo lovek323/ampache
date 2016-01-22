@@ -20,7 +20,7 @@
  *
  */
 
-class Artist extends database_object implements library_item
+class Artist extends AbstractDatabaseObject implements LibraryItemInterface
 {
     /* Variables from DB */
 
@@ -209,7 +209,7 @@ class Artist extends database_object implements library_item
         $sql        = "SELECT * FROM `artist` WHERE `id` IN $idlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('artist',$row['id'],$row);
         }
 
@@ -220,7 +220,7 @@ class Artist extends database_object implements library_item
             debug_event("Artist", "build_cache sql: " . $sql, "6");
             $db_results = Dba::read($sql);
 
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 if (AmpConfig::get('show_played_times')) {
                     $row['object_cnt'] = Stats::get_object_count('artist', $row['artist'], $limit_threshold);
                 }
@@ -242,7 +242,7 @@ class Artist extends database_object implements library_item
         $sql        = "SELECT `id` FROM `artist` WHERE `name` = ?'";
         $db_results = Dba::read($sql, array($name));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         $object = new Artist($row['id']);
 
@@ -293,7 +293,7 @@ class Artist extends database_object implements library_item
         $db_results = Dba::read($sql);
 
         $mbids = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             if ($ignoreAlbumGroups || empty($r['mbid']) || !in_array($r['mbid'], $mbids)) {
                 if ($group_release_type) {
                     // We assume undefined release type is album
@@ -348,7 +348,7 @@ class Artist extends database_object implements library_item
         $db_results = Dba::read($sql, array($this->id));
 
         $results = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -375,7 +375,7 @@ class Artist extends database_object implements library_item
         $sql .= "ORDER BY RAND()";
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -408,7 +408,7 @@ class Artist extends database_object implements library_item
             $sql .= $sqlw . "GROUP BY `song`.`artist`";
 
             $db_results = Dba::read($sql, $params);
-            $row        = Dba::fetch_assoc($db_results);
+            $row        = Dba::fetchAssoc($db_results);
             
             
             // Get associated information from first song only
@@ -416,7 +416,7 @@ class Artist extends database_object implements library_item
             $sql .= $sqlw . "LIMIT 1";
             
             $db_results = Dba::read($sql, $params);
-            $row        = array_merge($row, Dba::fetch_assoc($db_results));
+            $row        = array_merge($row, Dba::fetchAssoc($db_results));
             
             if (AmpConfig::get('show_played_times')) {
                 $row['object_cnt'] = Stats::get_object_count('artist', $row['artist'], $limit_threshold);
@@ -508,7 +508,7 @@ class Artist extends database_object implements library_item
      * Get item fullname.
      * @return string
      */
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_full_name;
     }
@@ -517,7 +517,7 @@ class Artist extends database_object implements library_item
      * Get parent item description.
      * @return array|null
      */
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
@@ -526,7 +526,7 @@ class Artist extends database_object implements library_item
      * Get item childrens.
      * @return array
      */
-    public function get_childrens()
+    public function getChildren()
     {
         $medias = array();
         $albums = $this->get_albums();
@@ -544,7 +544,7 @@ class Artist extends database_object implements library_item
      * @param string $name
      * @return array
      */
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         $search['type']            = "album";
         $search['rule_0_input']    = $name;
@@ -567,13 +567,13 @@ class Artist extends database_object implements library_item
 
     /**
      * Get all childrens and sub-childrens medias.
-     * @param string $filter_type
+     * @param string $filterType
      * @return array
      */
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'song') {
+        if (!$filterType || $filterType == 'song') {
             $songs = $this->get_songs();
             foreach ($songs as $song_id) {
                 $medias[] = array(
@@ -591,7 +591,7 @@ class Artist extends database_object implements library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog_id);
     }
@@ -630,7 +630,7 @@ class Artist extends database_object implements library_item
         }
 
         if ($id !== null && $type !== null) {
-            Art::display($type, $id, $this->get_fullname(), $thumb, $this->link);
+            Art::display($type, $id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -691,7 +691,7 @@ class Artist extends database_object implements library_item
             $sql        = 'SELECT `id` FROM `artist` WHERE `mbid` = ?';
             $db_results = Dba::read($sql, array($mbid));
 
-            if ($row = Dba::fetch_assoc($db_results)) {
+            if ($row = Dba::fetchAssoc($db_results)) {
                 $id     = $row['id'];
                 $exists = true;
             }
@@ -702,7 +702,7 @@ class Artist extends database_object implements library_item
             $db_results = Dba::read($sql, array($name));
 
             $id_array = array();
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $key            = $row['mbid'] ?: 'null';
                 $id_array[$key] = $row['id'];
             }

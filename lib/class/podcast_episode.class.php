@@ -20,7 +20,7 @@
  *
  */
 
-class Podcast_Episode extends database_object implements media, library_item
+class Podcast_Episode extends AbstractDatabaseObject implements MediaInterface, LibraryItemInterface
 {
     public $id;
     public $title;
@@ -101,7 +101,7 @@ class Podcast_Episode extends database_object implements media, library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog);
     }
@@ -159,30 +159,30 @@ class Podcast_Episode extends database_object implements media, library_item
         return $keywords;
     }
     
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_title;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return array('object_type' => 'podcast', 'object_id' => $this->podcast);
     }
     
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
     
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'podcast_episode') {
+        if (!$filterType || $filterType == 'podcast_episode') {
             $medias[] = array(
                 'object_type' => 'podcast_episode',
                 'object_id' => $this->id
@@ -222,7 +222,7 @@ class Podcast_Episode extends database_object implements media, library_item
         }
 
         if ($id !== null && $type !== null) {
-            Art::display($type, $id, $this->get_fullname(), $thumb, $this->link);
+            Art::display($type, $id, $this->getFullname(), $thumb, $this->link);
         }
     }
     
@@ -330,9 +330,9 @@ class Podcast_Episode extends database_object implements media, library_item
      * @param array $options
      * @return array|boolean
      */
-    public function get_transcode_settings($target = null, $player = null, $options=array())
+    public function getTranscodeSettings($target = null, $player = null, $options=array())
     {
-        return Song::get_transcode_settings_for_media($this->type, $target, $player, 'song', $options);
+        return Song::getTranscodeSettingsForMedia($this->type, $target, $player, 'song', $options);
     }
     
     /**

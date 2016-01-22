@@ -1367,7 +1367,7 @@ class Plex_XML_Data
             if ($type == 'audio' || $type == 'video') {
                 $item = self::createLibraryItem($id);
                 if ($item != null) {
-                    $plmedias = $item->get_medias();
+                    $plmedias = $item->getMedia();
                 }
             }
         } else {

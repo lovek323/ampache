@@ -52,7 +52,7 @@ class WebPlayer
 
     /**
      * Get types information for an item.
-     * @param \playable_item $item
+     * @param \PlayableItemInterface $item
      * @param string $force_type
      * @return array
      */
@@ -228,16 +228,17 @@ class WebPlayer
 
     /**
      * Get media javascript parameters.
-     * @param \playable_item $item
+     *
+     * @param PlayableItemInterface $item
      * @param string $force_type
      * @return string
      */
     public static function get_media_js_param($item, $force_type='')
     {
         $js = array();
-        foreach (array('title', 'author') as $member) {
-            if ($member == "author") {
-                $kmember = "artist";
+        foreach (['title', 'author'] as $member) {
+            if ($member == 'author') {
+                $kmember = 'artist';
             } else {
                 $kmember = $member;
             }
@@ -275,10 +276,10 @@ class WebPlayer
             if ($urlinfo['type'] == 'song') {
                 $js['artist_id']             = $media->artist;
                 $js['album_id']              = $media->album;
-                $js['replaygain_track_gain'] = $media->replaygain_track_gain;
-                $js['replaygain_track_peak'] = $media->replaygain_track_peak;
-                $js['replaygain_album_gain'] = $media->replaygain_album_gain;
-                $js['replaygain_album_peak'] = $media->replaygain_album_peak;
+                $js['replaygain_track_gain'] = $media->replaygainTrackGain;
+                $js['replaygain_track_peak'] = $media->replaygainTrackPeak;
+                $js['replaygain_album_gain'] = $media->replaygainAlbumGain;
+                $js['replaygain_album_peak'] = $media->replaygainAlbumPeak;
             }
             $js['media_id']   = $media->id;
             $js['media_type'] = $urlinfo['type'];

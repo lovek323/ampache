@@ -79,12 +79,12 @@ class Recommendation
         $sql        = "SELECT `id`, `last_update` FROM `recommendation` WHERE `object_type` = ? AND `object_id` = ?";
         $db_results = Dba::read($sql, array($type, $id));
 
-        if ($cache = Dba::fetch_assoc($db_results)) {
+        if ($cache = Dba::fetchAssoc($db_results)) {
             if ($get_items) {
                 $cache['items'] = array();
                 $sql            = "SELECT `recommendation_id`, `name`, `rel`, `mbid` FROM `recommendation_item` WHERE `recommendation` = ?";
                 $db_results     = Dba::read($sql, array($cache['id']));
-                while ($results = Dba::fetch_assoc($db_results)) {
+                while ($results = Dba::fetchAssoc($db_results)) {
                     $cache['items'][] = array(
                         'id' => $results['recommendation_id'],
                         'name' => $results['name'],
@@ -160,7 +160,7 @@ class Recommendation
 
                     $db_result = Dba::read($sql, array($name, $s_artist_name['string']));
 
-                    if ($result = Dba::fetch_assoc($db_result)) {
+                    if ($result = Dba::fetchAssoc($db_result)) {
                         $local_id = $result['id'];
                     }
 
@@ -236,7 +236,7 @@ class Recommendation
                         $sql .= " AND " . Catalog::get_enable_filter('artist', '`artist`.`id`');
                     }
                     $db_result = Dba::read($sql, array($mbid));
-                    if ($result = Dba::fetch_assoc($db_result)) {
+                    if ($result = Dba::fetchAssoc($db_result)) {
                         $local_id = $result['id'];
                     }
                 }
@@ -251,7 +251,7 @@ class Recommendation
                         $sql .= " AND " . Catalog::get_enable_filter('artist', '`artist`.`id`');
                     }
                     $db_result = Dba::read($sql, array($searchname));
-                    if ($result = Dba::fetch_assoc($db_result)) {
+                    if ($result = Dba::fetchAssoc($db_result)) {
                         $local_id = $result['id'];
                     }
                 }

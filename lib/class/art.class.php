@@ -30,7 +30,7 @@ use MusicBrainz\HttpAdapters\RequestsHttpAdapter;
  * This was initially in the album class, but was pulled out
  * to be more general and potentially apply to albums, artists, movies etc
  */
-class Art extends database_object
+class Art extends AbstractDatabaseObject
 {
     /**
      *  @var int $id
@@ -111,7 +111,7 @@ class Art extends database_object
         $sql        = "SELECT `object_type`, `object_id`, `mime`, `size` FROM `image` WHERE `object_id` IN $uidlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('art', $row['object_type'] .
                 $row['object_id'] . $row['size'], $row);
         }
@@ -256,7 +256,7 @@ class Art extends database_object
         $sql        = "SELECT `id`, `image`, `mime`, `size` FROM `image` WHERE `object_type` = ? AND `object_id` = ? AND `kind` = ?";
         $db_results = Dba::read($sql, array($this->type, $this->uid, $this->kind));
 
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             if ($results['size'] == 'original') {
                 if (AmpConfig::get('album_art_store_disk')) {
                     $this->raw = self::read_from_dir($results['size'], $this->type, $this->uid, $this->kind);
@@ -310,7 +310,7 @@ class Art extends database_object
         $sql        = "SELECT COUNT(`id`) AS `nb_img` FROM `image` WHERE `object_type` = ? AND `object_id` = ? AND `kind` = ?";
         $db_results = Dba::read($sql, array($object_type, $object_id, $kind));
         $nb_img     = 0;
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             $nb_img = $results['nb_img'];
         }
 
@@ -600,7 +600,7 @@ class Art extends database_object
         $sql        = "SELECT `image`, `mime` FROM `image` WHERE `size` = ? AND `object_type` = ? AND `object_id` = ? AND `kind` = ?";
         $db_results = Dba::read($sql, array($sizetext, $this->type, $this->uid, $this->kind));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
         if (count($results)) {
             $image = null;
             if (AmpConfig::get('album_art_store_disk')) {
@@ -752,7 +752,7 @@ class Art extends database_object
         if (isset($data['db'])) {
             $sql        = "SELECT * FROM `image` WHERE `object_type` = ? AND `object_id` =? AND `size`='original'";
             $db_results = Dba::read($sql, array($type, $data['db']));
-            $row        = Dba::fetch_assoc($db_results);
+            $row        = Dba::fetchAssoc($db_results);
             return $row['art'];
         } // came from the db
 
@@ -836,7 +836,7 @@ class Art extends database_object
             $sql        = "SELECT `object_type`, `object_id`, `mime`, `size` FROM `image` WHERE `object_type` = ? AND `object_id` = ?";
             $db_results = Dba::read($sql, array($type, $uid));
 
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 parent::add_to_cache('art', $key . $row['size'], $row);
                 if ($row['size'] == 'original') {
                     $mime = $row['mime'];
@@ -939,7 +939,7 @@ class Art extends database_object
         if (AmpConfig::get('album_art_store_disk')) {
             $sql        = "SELECT `size`, `kind` FROM `image` WHERE `object_type` = ? AND `object_id` = ?";
             $db_results = Dba::read($sql, array($object_type, $old_object_id));
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $image = self::read_from_dir($row['size'], $object_type, $old_object_id, $row['kind']);
                 if ($image != null) {
                     self::write_to_dir($image, $row['size'], $object_type, $new_object_id, $row['kind']);
@@ -1391,7 +1391,7 @@ class Art extends database_object
 
     /**
      * Gather tags from files.
-     * @param media $media
+     * @param MediaInterface $media
      * @return array
      */
     protected function gather_media_tags($media)
@@ -1685,14 +1685,14 @@ class Art extends database_object
 
     /**
      * Display an item art.
-     * @param library_item $item
+     * @param LibraryItemInterface $item
      * @param int $thumb
      * @param string $link
      * @return boolean
      */
     public static function display_item($item, $thumb, $link = null)
     {
-        return self::display($item->type ?: strtolower(get_class($item)), $item->id, $item->get_fullname(), $thumb, $link);
+        return self::display($item->type ?: strtolower(get_class($item)), $item->id, $item->getFullname(), $thumb, $link);
     }
 
     /**

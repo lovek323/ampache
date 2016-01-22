@@ -26,7 +26,7 @@
  * This user flag/unflag songs, albums, artists, videos, tvshows, movies ... as favorite.
  *
  */
-class Userflag extends database_object
+class Userflag extends AbstractDatabaseObject
 {
     // Public variables
     public $id;        // The ID of the object flagged
@@ -68,7 +68,7 @@ class Userflag extends database_object
             "AND `object_type` = ?";
         $db_results = Dba::read($sql, array($user_id, $type));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $userflags[$row['object_id']] = true;
         }
 
@@ -123,7 +123,7 @@ class Userflag extends database_object
         $db_results = Dba::read($sql, array($user_id, $this->id, $this->type));
 
         $flagged = false;
-        if (Dba::fetch_assoc($db_results)) {
+        if (Dba::fetchAssoc($db_results)) {
             $flagged = true;
         }
 
@@ -243,7 +243,7 @@ class Userflag extends database_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             if ($type === null) {
                 $results[] = $row;
             } else {

@@ -172,7 +172,7 @@ class AmpacheMpd extends localplay_controller
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = $row['name'];
         }
 
@@ -192,7 +192,7 @@ class AmpacheMpd extends localplay_controller
         $sql        = "SELECT * FROM `localplay_mpd` WHERE `id`='$instance'";
         $db_results = Dba::read($sql);
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row;
     } // get_instance
@@ -470,7 +470,7 @@ class AmpacheMpd extends localplay_controller
                         "SELECT `id`,'live_stream' AS `type` FROM `live_stream` WHERE `url`='$filename' ";
 
                     $db_results = Dba::read($sql);
-                    if ($row = Dba::fetch_assoc($db_results)) {
+                    if ($row = Dba::fetchAssoc($db_results)) {
                         $media = new $row['type']($row['id']);
                         $media->format();
                         switch ($row['type']) {

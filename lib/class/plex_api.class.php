@@ -1434,7 +1434,7 @@ class Plex_Api
                 $id       = Plex_XML_Data::getKeyFromMetadataUri($key);
                 if ($id) {
                     $item   = Plex_XML_Data::createLibraryItem($id);
-                    $medias = $item->get_medias();
+                    $medias = $item->getMedia();
                     $playlist->add_medias($medias);
                 }
                 $plid = Plex_XML_Data::getPlaylistId($plid);
@@ -1474,7 +1474,7 @@ class Plex_Api
                             $id  = Plex_XML_Data::getKeyFromMetadataUri($key);
                             if ($id) {
                                 $item   = Plex_XML_Data::createLibraryItem($id);
-                                $medias = $item->get_medias();
+                                $medias = $item->getMedia();
                                 $playlist->add_medias($medias);
                                 Plex_XML_Data::addPlaylist($r, $playlist);
                             }

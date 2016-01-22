@@ -20,7 +20,7 @@
  *
  */
 
-class Ampachelyricwiki
+class LyricWiki
 {
     public $name           = 'LyricWiki';
     public $categories     = 'lyrics';

@@ -43,7 +43,7 @@ class Random
             "ORDER BY RAND() LIMIT 1";
         $db_results = Dba::read($sql);
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['id'];
     } // artist
@@ -60,7 +60,7 @@ class Random
             " ORDER BY RAND()";
         $db_results = Dba::read($sql);
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['id'];
     } // playlist
@@ -103,7 +103,7 @@ class Random
         $sql .= "ORDER BY RAND() LIMIT $limit";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -136,7 +136,7 @@ class Random
         $sql .= "$where_sql ORDER BY RAND() LIMIT $limit";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -168,7 +168,7 @@ class Random
         $sql .= "$where_sql ORDER BY RAND() LIMIT $limit";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -278,7 +278,7 @@ class Random
         $fuzzy_size = 0;
         $time_total = 0;
         $fuzzy_time = 0;
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
 
             // If size limit is specified
             if ($data['size_limit']) {

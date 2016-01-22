@@ -40,7 +40,7 @@ if ($debug) { echo T_('DEBUG ENABLED WILL NOT DELETE FILES!'); echo "\n"; }
 $sql = "SELECT `id`, `file` FROM song WHERE enabled='0'";
 $db_results = Dba::read($sql);
 
-while ($row = Dba::fetch_assoc($db_results)) {
+while ($row = Dba::fetchAssoc($db_results)) {
     if ($debug) {
         printf (T_('Would Delete: %s'), $row['file']);
         echo "\n";

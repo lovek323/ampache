@@ -158,7 +158,7 @@ class AmpacheXbmc extends localplay_controller
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = $row['name'];
         }
 
@@ -204,7 +204,7 @@ class AmpacheXbmc extends localplay_controller
         $sql        = "SELECT * FROM `localplay_xbmc` WHERE `id` = ?";
         $db_results = Dba::query($sql, array($instance));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row;
     } // get_instance

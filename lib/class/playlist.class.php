@@ -26,7 +26,7 @@
  * This class handles playlists in ampache. it references the playlist* tables
  *
  */
-class Playlist extends playlist_object
+class Playlist extends playlist_objectAbstract
 {
     /* Variables from the database */
     public $genre;
@@ -80,7 +80,7 @@ class Playlist extends playlist_object
         $sql        = "SELECT * FROM `playlist` WHERE `id` IN $idlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('playlist',$row['id'],$row);
         }
     } // build_cache
@@ -114,7 +114,7 @@ class Playlist extends playlist_object
 
         $db_results = Dba::read($sql, $params);
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -143,7 +143,7 @@ class Playlist extends playlist_object
         $sql        = "SELECT * FROM `playlist_data` WHERE `id` = ? AND `playlist` = ?";
         $db_results = Dba::read($sql, array($track_id, $this->id));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row;
     } // get_track
@@ -161,7 +161,7 @@ class Playlist extends playlist_object
         $sql        = "SELECT `id`,`object_id`,`object_type`,`track` FROM `playlist_data` WHERE `playlist`= ? ORDER BY `track`";
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array(
                 'object_type' => $row['object_type'],
                 'object_id' => $row['object_id'],
@@ -187,7 +187,7 @@ class Playlist extends playlist_object
             "WHERE `playlist` = ? ORDER BY RAND() $limit_sql";
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array(
                 'object_type' => $row['object_type'],
                 'object_id' => $row['object_id']
@@ -209,7 +209,7 @@ class Playlist extends playlist_object
         $sql        = "SELECT * FROM `playlist_data` WHERE `playlist` = ? AND `object_type` = 'song' ORDER BY `track`";
         $db_results = Dba::read($sql, array($this->id));
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['object_id'];
         } // end while
 
@@ -265,7 +265,7 @@ class Playlist extends playlist_object
         $sql        = "SELECT `id` FROM `playlist` WHERE `user` = ? ORDER BY `name`";
         $db_results = Dba::read($sql, array($user_id));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -373,7 +373,7 @@ class Playlist extends playlist_object
          */
         $sql        = "SELECT `track` FROM `playlist_data` WHERE `playlist` = ? ORDER BY `track` DESC LIMIT 1";
         $db_results = Dba::read($sql, array($this->id));
-        $data       = Dba::fetch_assoc($db_results);
+        $data       = Dba::fetchAssoc($db_results);
         $base_track = $data['track'] ?: 0;
         debug_event('add_medias', 'Track number: ' . $base_track, '5');
 
@@ -491,7 +491,7 @@ class Playlist extends playlist_object
         $i       = 1;
         $results = array();
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $new_data               = array();
             $new_data['id']         = $r['id'];
             $new_data['track']      = $i;

@@ -20,7 +20,7 @@
  *
  */
 
-class Song_Preview extends database_object implements media, playable_item
+class Song_Preview extends AbstractDatabaseObject implements MediaInterface, PlayableItemInterface
 {
     public $id;
     public $file;
@@ -132,7 +132,7 @@ class Song_Preview extends database_object implements media, playable_item
         $db_results = Dba::read($sql);
 
         $artists = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('song_preview', $row['id'], $row);
             if ($row['artist']) {
                 $artists[$row['artist']] = $row['artist'];
@@ -159,12 +159,12 @@ class Song_Preview extends database_object implements media, playable_item
             'FROM `song_preview` WHERE `id` = ?';
         $db_results = Dba::read($sql, array($id));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
         if (!empty($results['id'])) {
             if (empty($results['artist_mbid'])) {
                 $sql        = 'SELECT `mbid` FROM `artist` WHERE `id` = ?';
                 $db_results = Dba::read($sql, array($results['artist']));
-                if ($artist_res = Dba::fetch_assoc($db_results)) {
+                if ($artist_res = Dba::fetchAssoc($db_results)) {
                     $results['artist_mbid'] = $artist_res['mbid'];
                 }
             }
@@ -225,31 +225,31 @@ class Song_Preview extends database_object implements media, playable_item
         return true;
     } // format
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_title;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         // Wanted album is not part of the library, cannot return it.
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'song_preview') {
+        if (!$filterType || $filterType == 'song_preview') {
             $medias[] = array(
                 'object_type' => 'song_preview',
                 'object_id' => $this->id
@@ -264,7 +264,7 @@ class Song_Preview extends database_object implements media, playable_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array();
     }
@@ -313,7 +313,7 @@ class Song_Preview extends database_object implements media, playable_item
      *
      * FIXME: Song Preview transcoding is not implemented
      */
-    public function get_transcode_settings($target = null, $player = null, $options=array())
+    public function getTranscodeSettings($target = null, $player = null, $options=array())
     {
         return false;
     }
@@ -336,7 +336,7 @@ class Song_Preview extends database_object implements media, playable_item
             "WHERE `session` = ? AND `album_mbid` = ?";
         $db_results = Dba::read($sql, array(session_id(), $album_mbid));
 
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $songs[] = new Song_Preview($results['id']);
         }
 

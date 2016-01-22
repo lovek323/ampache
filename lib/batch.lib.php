@@ -49,7 +49,7 @@ function get_media_files($media_ids)
             $media->format();
             $total_size += sprintf("%.2f",($media->size/1048576));
             $dirname = '';
-            $parent  = $media->get_parent();
+            $parent  = $media->getParent();
             if ($parent != null) {
                 $pobj = new $parent['object_type']($parent['object_id']);
                 $pobj->format();

@@ -112,7 +112,7 @@ if (!Core::is_session_started()) {
                 <?php
                     $sql = 'SELECT `id`,`name` FROM `catalog`';
     $db_results          = Dba::read($sql);
-    while ( $data = Dba::fetch_assoc($db_results) ) {
+    while ( $data = Dba::fetchAssoc($db_results) ) {
         $results[] = $data;
     }
 

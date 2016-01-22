@@ -28,7 +28,7 @@
  * with a user_id from user.id
  *
  */
-class User extends database_object
+class User extends AbstractDatabaseObject
 {
     //Basic Componets
     /**
@@ -217,7 +217,7 @@ class User extends database_object
         $sql        = "SELECT * FROM `user` WHERE `id`='$id'";
         $db_results = Dba::read($sql);
 
-        $data = Dba::fetch_assoc($db_results);
+        $data = Dba::fetchAssoc($db_results);
 
         parent::add_to_cache('user',$id,$data);
 
@@ -247,7 +247,7 @@ class User extends database_object
 
         $sql        = "SELECT `id` FROM `user` WHERE `disabled` = '0'";
         $db_results = Dba::read($sql);
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $users[] = $results['id'];
         }
 
@@ -263,7 +263,7 @@ class User extends database_object
     {
         $sql        = "SELECT `id` FROM `user` WHERE `username` = ?";
         $db_results = Dba::read($sql, array($username));
-        $results    = Dba::fetch_assoc($db_results);
+        $results    = Dba::fetchAssoc($db_results);
 
         $user = new User($results['id']);
 
@@ -282,7 +282,7 @@ class User extends database_object
         if (!empty($apikey)) {
             $sql        = "SELECT `id` FROM `user` WHERE `apikey` = ?";
             $db_results = Dba::read($sql, array($apikey));
-            $results    = Dba::fetch_assoc($db_results);
+            $results    = Dba::fetchAssoc($db_results);
 
             if ($results['id']) {
                 $user = new User($results['id']);
@@ -302,7 +302,7 @@ class User extends database_object
         $user       = null;
         $sql        = "SELECT `id` FROM `user` WHERE `email` = ?";
         $db_results = Dba::read($sql, array($email));
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             $user = new User($results['id']);
         }
 
@@ -319,7 +319,7 @@ class User extends database_object
         $sql        = "SELECT `id` FROM `user` WHERE `website` = ? LIMIT 1";
         $db_results = Dba::read($sql, array($website));
         $users      = array();
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $users[] = $results['id'];
         }
         return $users;
@@ -339,7 +339,7 @@ class User extends database_object
         $db_results = Dba::read($sql, array($this->id));
 
         $catalogs = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $catalogs[] = $row['catalog'];
         }
 
@@ -381,7 +381,7 @@ class User extends database_object
         $results    = array();
         $type_array = array();
         /* Ok this is crapy, need to clean this up or improve the code FIXME */
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $type  = $r['catagory'];
             $admin = false;
             if ($type == 'system') {
@@ -406,7 +406,7 @@ class User extends database_object
             "AND user_preference.preference=preference.id AND preference.type != 'system'";
         $db_results = Dba::read($sql);
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $key               = $r['name'];
             $this->prefs[$key] = $r['value'];
         }
@@ -474,7 +474,7 @@ class User extends database_object
         // Incase they only have one user
         $users   = array();
         $ratings = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             /* Store the fact that you rated this */
             $key           = $r['object_id'];
             $ratings[$key] = true;
@@ -485,7 +485,7 @@ class User extends database_object
                 "AND user_rating ='" . Dba::escape($r['user_rating']) . "'";
             $user_results = Dba::read($sql);
 
-            while ($user_info = Dba::fetch_assoc($user_results)) {
+            while ($user_info = Dba::fetchAssoc($user_results)) {
                 $key = $user_info['user'];
                 $users[$key]++;
             }
@@ -506,7 +506,7 @@ class User extends database_object
                 "object_type = '" . Dba::escape($type) . "' ORDER BY user_rating DESC";
             $db_results = Dba::read($sql);
 
-            while ($r = Dba::fetch_assoc($db_results)) {
+            while ($r = Dba::fetchAssoc($db_results)) {
                 $key = $r['object_id'];
                 if (isset($ratings[$key])) {
                     continue;
@@ -537,7 +537,7 @@ class User extends database_object
             " AND `expire` > " . time();
         $db_results = Dba::read($sql);
 
-        if ($row = Dba::fetch_assoc($db_results)) {
+        if ($row = Dba::fetchAssoc($db_results)) {
             $ip = $row['ip'] ? $row['ip'] : null;
             return $ip;
         }
@@ -754,7 +754,7 @@ class User extends database_object
     {
         $sql        = 'SELECT * FROM `user` WHERE `id` = ?';
         $db_results = Dba::read($sql, array($this->id));
-        $row        = Dba::fetch_assoc($db_results);
+        $row        = Dba::fetchAssoc($db_results);
 
         return $row['password'];
     }
@@ -1025,7 +1025,7 @@ class User extends database_object
                 "WHERE `object_count`.`user`='$this->id' AND `object_count`.`object_type`='song'";
             $db_results = Dba::read($sql);
 
-            $result = Dba::fetch_assoc($db_results);
+            $result = Dba::fetchAssoc($db_results);
             $total  = $result['size'];
 
             $this->f_useage = UI::format_bytes($total);
@@ -1087,7 +1087,7 @@ class User extends database_object
 
         $results = array();
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $pref_id = $r['preference'];
             /* Check for duplicates */
             if (isset($results[$pref_id])) {
@@ -1108,7 +1108,7 @@ class User extends database_object
             $db_results = Dba::read($sql);
             /* While through our base stuff */
             $zero_results = array();
-            while ($r = Dba::fetch_assoc($db_results)) {
+            while ($r = Dba::fetchAssoc($db_results)) {
                 $key                = $r['preference'];
                 $zero_results[$key] = $r['value'];
             }
@@ -1123,7 +1123,7 @@ class User extends database_object
         }
         $db_results = Dba::read($sql);
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $key = $r['id'];
 
             /* Check if this preference is set */
@@ -1241,7 +1241,7 @@ class User extends database_object
         $sql        = "SELECT `validation` FROM `user` WHERE `username` = ?";
         $db_results = Dba::read($sql, array($username));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row['validation'];
     } // get_validation
@@ -1262,7 +1262,7 @@ class User extends database_object
         $db_results = Dba::read($sql, array($type, $this->id));
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['object_id'];
         }
 
@@ -1298,7 +1298,7 @@ class User extends database_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row;
         }
 
@@ -1393,7 +1393,7 @@ class User extends database_object
         $db_results = Dba::read($sql, array($this->id));
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -1427,7 +1427,7 @@ class User extends database_object
         $sql        = "SELECT `user` FROM `user_follower` WHERE `follow_user` = ?";
         $db_results = Dba::read($sql, array($this->id));
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['user'];
         }
         return $results;
@@ -1443,7 +1443,7 @@ class User extends database_object
         $sql        = "SELECT `follow_user` FROM `user_follower` WHERE `user` = ?";
         $db_results = Dba::read($sql, array($this->id));
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['follow_user'];
         }
         return $results;
@@ -1560,7 +1560,7 @@ class User extends database_object
             "GROUP BY `user` HAVING COUNT(*) < (" .
             "SELECT COUNT(`id`) FROM `preference` WHERE `catagory` != 'system')";
         $db_results = Dba::read($sql);
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             User::fix_preferences($row['user']);
         }
 

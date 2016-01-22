@@ -20,7 +20,7 @@
  *
  */
 
-class Channel extends database_object implements media, library_item
+class Channel extends AbstractDatabaseObject implements MediaInterface, LibraryItemInterface
 {
     public $id;
     public $is_private;
@@ -129,7 +129,7 @@ class Channel extends database_object implements media, library_item
         $sql        = "SELECT MAX(`port`) AS `max_port` FROM `channel`";
         $db_results = Dba::read($sql);
 
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             if ($results['max_port'] > 0) {
                 $port = $results['max_port'] + 1;
             }
@@ -202,30 +202,30 @@ class Channel extends database_object implements media, library_item
         return array();
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->name;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'channel') {
+        if (!$filterType || $filterType == 'channel') {
             $medias[] = array(
                     'object_type' => 'channel',
                     'object_id' => $this->id
@@ -252,7 +252,7 @@ class Channel extends database_object implements media, library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'channel')) {
-            Art::display('channel', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('channel', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -290,7 +290,7 @@ class Channel extends database_object implements media, library_item
         $db_results = Dba::read($sql);
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -502,7 +502,7 @@ class Channel extends database_object implements media, library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array();
     }
@@ -521,7 +521,7 @@ class Channel extends database_object implements media, library_item
 
     public function get_stream_name()
     {
-        return $this->get_fullname();
+        return $this->getFullname();
     }
 
     public function set_played($user, $agent, $location)
@@ -529,7 +529,7 @@ class Channel extends database_object implements media, library_item
         // Do nothing
     }
 
-    public function get_transcode_settings($target = null, $player = null, $options=array())
+    public function getTranscodeSettings($target = null, $player = null, $options=array())
     {
         return false;
     }

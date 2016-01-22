@@ -20,7 +20,7 @@
  *
  */
 
-class Video extends database_object implements media, library_item
+class Video extends AbstractDatabaseObject implements MediaInterface, LibraryItemInterface
 {
     /**
      * @var int $id
@@ -215,7 +215,7 @@ class Video extends database_object implements media, library_item
         foreach ($dtypes as $dtype) {
             $sql        = "SELECT `id` FROM `" . strtolower($dtype) . "` WHERE `id` = ?";
             $db_results = Dba::read($sql, array($video_id));
-            if ($results = Dba::fetch_assoc($db_results)) {
+            if ($results = Dba::fetchAssoc($db_results)) {
                 if ($results['id']) {
                     return new $dtype($video_id);
                 }
@@ -240,7 +240,7 @@ class Video extends database_object implements media, library_item
         $sql        = "SELECT * FROM `video` WHERE `video`.`id` IN $idlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('video',$row['id'],$row);
         }
     } // build_cache
@@ -309,7 +309,7 @@ class Video extends database_object implements media, library_item
      * Get item fullname.
      * @return string
      */
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_title;
     }
@@ -318,7 +318,7 @@ class Video extends database_object implements media, library_item
      * Get parent item description.
      * @return array|null
      */
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
@@ -327,7 +327,7 @@ class Video extends database_object implements media, library_item
      * Get item childrens.
      * @return array
      */
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
@@ -337,20 +337,20 @@ class Video extends database_object implements media, library_item
      * @param string $name
      * @return array
      */
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
     /**
      * Get all childrens and sub-childrens medias.
-     * @param string $filter_type
+     * @param string $filterType
      * @return array
      */
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'video') {
+        if (!$filterType || $filterType == 'video') {
             $medias[] = array(
                 'object_type' => 'video',
                 'object_id' => $this->id
@@ -365,7 +365,7 @@ class Video extends database_object implements media, library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog);
     }
@@ -396,7 +396,7 @@ class Video extends database_object implements media, library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'video')) {
-            Art::display('video', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('video', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -454,9 +454,9 @@ class Video extends database_object implements media, library_item
      * @param array $options
      * @return array
      */
-    public function get_transcode_settings($target = null, $player = null, $options=array())
+    public function getTranscodeSettings($target = null, $player = null, $options=array())
     {
-        return Song::get_transcode_settings_for_media($this->type, $target, $player, 'video', $options);
+        return Song::getTranscodeSettingsForMedia($this->type, $target, $player, 'video', $options);
     }
 
     /**
@@ -703,7 +703,7 @@ class Video extends database_object implements media, library_item
         $sql .= "ORDER BY RAND() LIMIT " . intval($count);
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

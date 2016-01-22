@@ -1,26 +1,6 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
-class Ampachechartlyrics
+class ChartLyrics
 {
     public $name           = 'ChartLyrics';
     public $categories     = 'lyrics';
@@ -58,29 +38,31 @@ class Ampachechartlyrics
     } // uninstall
 
     /**
-     * load
-     * This is a required plugin function; here it populates the prefs we 
+     * This is a required plugin function; here it populates the prefs we
      * need for this object.
+     * @return bool
      */
-    public function load($user)
+    public function load()
     {
         return true;
-    } // load
+    }
 
     /**
      * get_lyrics
      * This will look web services for a song lyrics.
+     * @param $song
+     * @return array|bool
      */
     public function get_lyrics($song)
     {
         $base    = 'http://api.chartlyrics.com/apiv1.asmx/';
         $uri     = $base . 'SearchLyricDirect?artist=' . urlencode($song->f_artist) . '&song=' . urlencode($song->title);
-        $request = Requests::get($uri, array(), Core::requests_options());
+        $request = Requests::get($uri, [], Core::requests_options());
         if ($request->status_code == 200) {
             $xml = simplexml_load_string($request->body);
             if ($xml) {
                 if (!empty($xml->Lyric)) {
-                    return array('text' => nl2br($xml->Lyric), 'url' => $xml->LyricUrl);
+                    return ['text' => nl2br($xml->Lyric), 'url' => $xml->LyricUrl];
                 }
             }
         }
@@ -88,4 +70,5 @@ class Ampachechartlyrics
         return false;
     } // get_lyrics
 } // end Ampachelyricwiki
-?>
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

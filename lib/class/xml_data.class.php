@@ -487,10 +487,10 @@ class XML_Data
 
             $string .= "\t<publisher><![CDATA[" . $song->label . "]]></publisher>\n"
                     . "\t<language>" . $song->language . "</language>\n"
-                    . "\t<replaygain_album_gain>" . $song->replaygain_album_gain . "</replaygain_album_gain>\n"
-                    . "\t<replaygain_album_peak>" . $song->replaygain_album_peak . "</replaygain_album_peak>\n"
-                    . "\t<replaygain_track_gain>" . $song->replaygain_track_gain . "</replaygain_track_gain>\n"
-                    . "\t<replaygain_track_peak>" . $song->replaygain_track_peak . "</replaygain_track_peak>\n";
+                    . "\t<replaygain_album_gain>" . $song->replaygainAlbumGain . "</replaygain_album_gain>\n"
+                    . "\t<replaygain_album_peak>" . $song->replaygainAlbumPeak . "</replaygain_album_peak>\n"
+                    . "\t<replaygain_track_gain>" . $song->replaygainTrackGain . "</replaygain_track_gain>\n"
+                    . "\t<replaygain_track_peak>" . $song->replaygainTrackPeak . "</replaygain_track_peak>\n";
             foreach ($song->tags as $tag) {
                 $string .= "\t<genre><![CDATA[" . $tag['name'] . "]]></genre>\n";
             }
@@ -813,14 +813,14 @@ class XML_Data
         return $footer;
     } // _footer
 
-    public static function podcast(library_item $libitem)
+    public static function podcast(LibraryItemInterface $libitem)
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><rss />');
         $xml->addAttribute("xmlns:xmlns:atom", "http://www.w3.org/2005/Atom");
         $xml->addAttribute("xmlns:xmlns:itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd");
         $xml->addAttribute("version", "2.0");
         $xchannel = $xml->addChild("channel");
-        $xchannel->addChild("title", $libitem->get_fullname() . " Podcast");
+        $xchannel->addChild("title", $libitem->getFullname() . " Podcast");
         $xlink = $xchannel->addChild("atom:link", htmlentities($libitem->link));
         if (Art::has_db($libitem->id, get_class($libitem))) {
             $ximg = $xchannel->addChild("xmlns:itunes:image");
@@ -842,7 +842,7 @@ class XML_Data
             $xowner->addChild("xmlns:itunes:name", $user_owner->f_name);
         }
 
-        $medias = $libitem->get_medias();
+        $medias = $libitem->getMedia();
         foreach ($medias as $media_info) {
             $media = new $media_info['object_type']($media_info['object_id']);
             $media->format();

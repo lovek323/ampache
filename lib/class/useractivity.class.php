@@ -26,7 +26,7 @@
  * This user flag/unflag songs, albums, artists, videos, tvshows, movies ... as favorite.
  *
  */
-class Useractivity extends database_object
+class Useractivity extends AbstractDatabaseObject
 {
     /* Variables from DB */
     public $id;
@@ -73,7 +73,7 @@ class Useractivity extends database_object
         $sql        = "SELECT * FROM `user_activity` WHERE `id` IN $idlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('user_activity',$row['id'],$row);
         }
     }
@@ -140,7 +140,7 @@ class Useractivity extends database_object
         $sql .= " ORDER BY `activity_date` DESC LIMIT " . $limit;
         $db_results = Dba::read($sql, $params);
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
         return $results;
@@ -170,7 +170,7 @@ class Useractivity extends database_object
         $sql .= " ORDER BY `user_activity`.`activity_date` DESC LIMIT " . $limit;
         $db_results = Dba::read($sql, $params);
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
         return $results;

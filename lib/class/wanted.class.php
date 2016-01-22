@@ -24,7 +24,7 @@ use MusicBrainz\MusicBrainz;
 use MusicBrainz\HttpAdapters\RequestsHttpAdapter;
 use MusicBrainz\Filters\ArtistFilter;
 
-class Wanted extends database_object
+class Wanted extends AbstractDatabaseObject
 {
     /* Variables from DB */
 
@@ -262,7 +262,7 @@ class Wanted extends database_object
     {
         $sql        = "SELECT COUNT(`id`) AS `wanted_cnt` FROM `wanted` WHERE `accepted` = 1";
         $db_results = Dba::read($sql);
-        if ($row = Dba::fetch_assoc($db_results)) {
+        if ($row = Dba::fetchAssoc($db_results)) {
             return $row['wanted_cnt'];
         }
 
@@ -278,7 +278,7 @@ class Wanted extends database_object
     {
         $sql        = "SELECT `id` FROM `wanted` WHERE `mbid` = ?";
         $db_results = Dba::read($sql, array($mbid));
-        if ($row = Dba::fetch_assoc($db_results)) {
+        if ($row = Dba::fetchAssoc($db_results)) {
             return $row['id'];
         }
 
@@ -369,7 +369,7 @@ class Wanted extends database_object
         $sql        = "SELECT `id` FROM `wanted` WHERE `mbid` = ? AND `user` = ?";
         $db_results = Dba::read($sql, array($mbid, $userid));
 
-        if ($row = Dba::fetch_assoc($db_results)) {
+        if ($row = Dba::fetchAssoc($db_results)) {
             return $row['id'];
         }
 
@@ -396,7 +396,7 @@ class Wanted extends database_object
             $wanted   = new Wanted($wantedid);
             $wanted->accept();
 
-            database_object::remove_from_cache('wanted', $wantedid);
+            AbstractDatabaseObject::remove_from_cache('wanted', $wantedid);
         }
     }
 
@@ -536,7 +536,7 @@ class Wanted extends database_object
         $db_results = Dba::read($sql);
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

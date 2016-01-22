@@ -377,6 +377,7 @@ if (!$isVideo) {
     ?>
 <div class="playing_info">
     <div class="playing_artist"></div>
+    <div class="playing_work"></div>
     <div class="playing_title"></div>
     <div class="playing_features">
         <div class="playing_lyrics"></div>

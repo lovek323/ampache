@@ -26,7 +26,7 @@
  * This handles all of the preference stuff for Ampache
  *
  */
-class Preference extends database_object
+class Preference extends AbstractDatabaseObject
 {
     /**
      * __constructor
@@ -58,7 +58,7 @@ class Preference extends database_object
             $sql        = "SELECT `value` FROM `user_preference` WHERE `preference`='$id' AND `user`='-1'";
             $db_results = Dba::read($sql);
         }
-        $data = Dba::fetch_assoc($db_results);
+        $data = Dba::fetchAssoc($db_results);
 
         parent::add_to_cache('get_by_user', $user_id, $data['value']);
 
@@ -182,7 +182,7 @@ class Preference extends database_object
 
         $sql        = "SELECT `level` FROM `preference` WHERE `name`='$preference'";
         $db_results = Dba::read($sql);
-        $data       = Dba::fetch_assoc($db_results);
+        $data       = Dba::fetchAssoc($db_results);
 
         if (Access::check('interface',$data['level'])) {
             return true;
@@ -205,7 +205,7 @@ class Preference extends database_object
 
         $sql        = "SELECT `id` FROM `preference` WHERE `name`='$name'";
         $db_results = Dba::read($sql);
-        $row        = Dba::fetch_assoc($db_results);
+        $row        = Dba::fetchAssoc($db_results);
 
         parent::add_to_cache('id_from_name', $name, $row['id']);
 
@@ -224,7 +224,7 @@ class Preference extends database_object
         $sql        = "SELECT `name` FROM `preference` WHERE `id`='$id'";
         $db_results = Dba::read($sql);
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row['name'];
     } // name_from_id
@@ -241,7 +241,7 @@ class Preference extends database_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             if ($row['catagory'] != 'internal') {
                 $results[] = $row['catagory'];
             }
@@ -271,7 +271,7 @@ class Preference extends database_object
         $db_results = Dba::read($sql);
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array('name'=>$row['name'],'level'=>$row['level'],'description'=>$row['description'],'value'=>$row['value'],'subcategory'=>$row['subcatagory']);
         }
 
@@ -459,7 +459,7 @@ class Preference extends database_object
         $db_results = Dba::read($sql, array($user_id));
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $value          = $row['system_value'] ? $row['system_value'] : $row['value'];
             $name           = $row['name'];
             $results[$name] = $value;

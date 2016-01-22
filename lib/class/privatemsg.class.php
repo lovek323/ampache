@@ -26,7 +26,7 @@
  * This is the class responsible for handling the PrivateMsg object
  * it is related to the user_pvmsg table in the database.
  */
-class PrivateMsg extends database_object
+class PrivateMsg extends AbstractDatabaseObject
 {
     /* Variables from DB */
 
@@ -205,7 +205,7 @@ class PrivateMsg extends database_object
 
         $db_results = Dba::read($sql, $params);
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
         return $results;

@@ -20,7 +20,7 @@
  *
  */
 
-class TVShow extends database_object implements library_item
+class TVShow extends AbstractDatabaseObject implements LibraryItemInterface
 {
     /* Variables from DB */
     public $id;
@@ -84,7 +84,7 @@ class TVShow extends database_object implements library_item
         $sql        = "SELECT `id` FROM `tvshow` WHERE `name` = ?'";
         $db_results = Dba::read($sql, array($name));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         $object = new TVShow($row['id']);
         return $object;
@@ -100,7 +100,7 @@ class TVShow extends database_object implements library_item
         $sql        = "SELECT `id` FROM `tvshow_season` WHERE `tvshow` = ? ORDER BY `season_number`";
         $db_results = Dba::read($sql, array($this->id));
         $results    = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -127,7 +127,7 @@ class TVShow extends database_object implements library_item
         $db_results = Dba::read($sql);
 
         $results = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -149,12 +149,12 @@ class TVShow extends database_object implements library_item
                 "LEFT JOIN `video` ON `video`.`id` = `tvshow_episode`.`id` " .
                 "WHERE `tvshow_season`.`tvshow` = ?";
             $db_results = Dba::read($sql, array($this->id));
-            $row        = Dba::fetch_assoc($db_results);
+            $row        = Dba::fetchAssoc($db_results);
 
             $sql = "SELECT COUNT(`tvshow_season`.`id`) AS `season_count` FROM `tvshow_season` " .
                 "WHERE `tvshow_season`.`tvshow` = ?";
             $db_results          = Dba::read($sql, array($this->id));
-            $row2                = Dba::fetch_assoc($db_results);
+            $row2                = Dba::fetchAssoc($db_results);
             $row['season_count'] = $row2['season_count'];
 
             parent::add_to_cache('tvshow_extra',$this->id,$row);
@@ -201,30 +201,30 @@ class TVShow extends database_object implements library_item
         return $keywords;
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_name;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         return array('tvshow_season' => $this->get_seasons());
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'video') {
+        if (!$filterType || $filterType == 'video') {
             $episodes = $this->get_episodes();
             foreach ($episodes as $episode_id) {
                 $medias[] = array(
@@ -242,7 +242,7 @@ class TVShow extends database_object implements library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog_id);
     }
@@ -265,7 +265,7 @@ class TVShow extends database_object implements library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'tvshow')) {
-            Art::display('tvshow', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('tvshow', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -293,7 +293,7 @@ class TVShow extends database_object implements library_item
             $db_results = Dba::read($sql, array($name, $year));
 
             $id_array = array();
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $key            = 'null';
                 $id_array[$key] = $row['id'];
             }

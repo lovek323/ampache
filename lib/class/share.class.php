@@ -20,7 +20,7 @@
  *
  */
 
-class Share extends database_object
+class Share extends AbstractDatabaseObject
 {
     public $id;
     public $user;
@@ -180,7 +180,7 @@ class Share extends database_object
         $db_results = Dba::read($sql);
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -192,7 +192,7 @@ class Share extends database_object
         $sql        = "SELECT `id` FROM `share` WHERE `object_type` = ? AND `object_id` = ?";
         $db_results = Dba::read($sql, array($object_type, $object_id));
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

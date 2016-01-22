@@ -20,7 +20,7 @@
  *
  */
 
-class Podcast extends database_object implements library_item
+class Podcast extends AbstractDatabaseObject implements LibraryItemInterface
 {
     /* Variables from DB */
     public $id;
@@ -82,7 +82,7 @@ class Podcast extends database_object implements library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array($this->catalog);
     }
@@ -111,7 +111,7 @@ class Podcast extends database_object implements library_item
         $db_results = Dba::read($sql, $params);
 
         $results = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -131,7 +131,7 @@ class Podcast extends database_object implements library_item
             $sql = "SELECT COUNT(`podcast_episode`.`id`) AS `episode_count` FROM `podcast_episode` " .
                 "WHERE `podcast_episode`.`podcast` = ?";
             $db_results = Dba::read($sql, array($this->id));
-            $row        = Dba::fetch_assoc($db_results);
+            $row        = Dba::fetchAssoc($db_results);
 
             parent::add_to_cache('podcast_extra',$this->id,$row);
         }
@@ -176,30 +176,30 @@ class Podcast extends database_object implements library_item
         return $keywords;
     }
     
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_title;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
     
-    public function get_childrens()
+    public function getChildren()
     {
         return array('podcast_episode' => $this->get_episodes());
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
     
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'podcast_episode') {
+        if (!$filterType || $filterType == 'podcast_episode') {
             $episodes = $this->get_episodes('completed');
             foreach ($episodes as $episode_id) {
                 $medias[] = array(
@@ -229,7 +229,7 @@ class Podcast extends database_object implements library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'podcast')) {
-            Art::display('podcast', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('podcast', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
     

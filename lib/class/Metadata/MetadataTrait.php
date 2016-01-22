@@ -1,43 +1,22 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 namespace Lib\Metadata;
 
-/**
- * Description of metadata
- *
- * @author raziel
- */
-trait Metadata
+use Lib\Metadata\Model\Metadata as MetadataModel;
+use Lib\Metadata\Model\Metadata;
+use Lib\Metadata\Model\MetadataField;
+use Lib\Metadata\Repository\MetadataFieldRepository;
+use Lib\Metadata\Repository\MetadataRepository;
+
+trait MetadataTrait
 {
     /**
-     *
-     * @var Repository\Metadata
+     * @var Repository\MetadataRepository
      */
     protected $metadataRepository;
 
     /**
-     *
-     * @var Repository\MetadataField
+     * @var Repository\MetadataFieldRepository
      */
     protected $metadataFieldRepository;
 
@@ -51,24 +30,24 @@ trait Metadata
      * Cache variable for disabled metadata field names
      * @var array
      */
-    protected $disabledMetadataFields = array();
+    protected $disabledMetadataFields = [];
 
     /**
      * Initialize the repository variables. Needs to be called first if the trait should do something.
      */
     protected function initializeMetadata()
     {
-        $this->metadataRepository      = new \Lib\Metadata\Repository\Metadata();
-        $this->metadataFieldRepository = new \Lib\Metadata\Repository\MetadataField();
+        $this->metadataRepository = new MetadataRepository();
+        $this->metadataFieldRepository = new MetadataFieldRepository();
     }
 
 
     /**
-     *
-     * @return Model\Metadata
+     * @return Model\Metadata[]
      */
     public function getMetadata()
     {
+        /** @noinspection PhpUndefinedFieldInspection (@todo fix $this->id) */
         return $this->metadataRepository->findByObjectIdAndType($this->id, get_class($this));
     }
 
@@ -83,22 +62,24 @@ trait Metadata
 
     /**
      *
-     * @param \Lib\Metadata\Model\MetadataField $field
-     * @param type $data
+     * @param MetadataField $field
+     * @param MetadataModel $data
      */
-    public function addMetadata(\Lib\Metadata\Model\MetadataField $field, $data)
+    public function addMetadata(MetadataField $field, $data)
     {
-        $metadata = new \Lib\Metadata\Model\Metadata();
+        $metadata = new Metadata();
         $metadata->setField($field);
+        /** @noinspection PhpUndefinedFieldInspection (@todo fix $this->id) */
         $metadata->setObjectId($this->id);
         $metadata->setType(get_class($this));
         $metadata->setData($data);
         $this->metadataRepository->add($metadata);
     }
 
-    public function updateOrInsertMetadata(\Lib\Metadata\Model\MetadataField $field, $data)
+    public function updateOrInsertMetadata(MetadataField $field, $data)
     {
-        /* @var $metadata Model\Metadata */
+        /* @var array $metadata */
+        /** @noinspection PhpUndefinedFieldInspection (@todo: fix $id in a better way) */
         $metadata = $this->metadataRepository->findByObjectIdAndFieldAndType($this->id, $field, get_class($this));
         if ($metadata) {
             $object = reset($metadata);
@@ -111,13 +92,13 @@ trait Metadata
 
     /**
      *
-     * @param type $name
-     * @param type $public
+     * @param $name
+     * @param $public
      * @return \Lib\Metadata\Model\MetadataField
      */
     protected function createField($name, $public)
     {
-        $field = new \Lib\Metadata\Model\MetadataField();
+        $field = new MetadataField();
         $field->setName($name);
         if (!$public) {
             $field->hide();
@@ -149,7 +130,7 @@ trait Metadata
      */
     public static function isCustomMetadataEnabled()
     {
-        return (boolean) \AmpConfig::get('enable_custom_metadata');
+        return (boolean)\AmpConfig::get('enable_custom_metadata');
     }
 
     /**
@@ -159,8 +140,8 @@ trait Metadata
     public function getDisabledMetadataFields()
     {
         if (!$this->disabledMetadataFields) {
-            $fields = array();
-            $ids    = explode(',', \AmpConfig::get('disabled_custom_metadata_fields'));
+            $fields = [];
+            $ids = explode(',', \AmpConfig::get('disabled_custom_metadata_fields'));
             foreach ($ids as $id) {
                 $field = $this->metadataFieldRepository->findById($id);
                 if ($field) {
@@ -168,9 +149,11 @@ trait Metadata
                 }
             }
             $this->disabledMetadataFields = array_merge(
-                    $fields, explode(',', \AmpConfig::get('disabled_custom_metadata_fields_input'))
+                $fields, explode(',', \AmpConfig::get('disabled_custom_metadata_fields_input'))
             );
         }
         return $this->disabledMetadataFields;
     }
 }
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

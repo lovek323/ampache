@@ -26,7 +26,7 @@
  * This class hnadles all of the tag relation operations
  *
  */
-class Tag extends database_object implements library_item
+class Tag extends AbstractDatabaseObject implements LibraryItemInterface
 {
     public $id;
     public $name;
@@ -78,7 +78,7 @@ class Tag extends database_object implements library_item
         $sql        = "SELECT * FROM `tag` WHERE `id` IN $idlist";
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             parent::add_to_cache('tag', $row['id'], $row);
         }
 
@@ -109,7 +109,7 @@ class Tag extends database_object implements library_item
 
         $tags    = array();
         $tag_map = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $tags[$row['object_id']][$row['tag_id']] = array('user'=>$row['user'], 'id'=>$row['tag_id'], 'name'=>$row['name']);
             $tag_map[$row['object_id']]              = array('id'=>$row['id'],'tag_id'=>$row['tag_id'],'user'=>$row['user'],'object_type'=>$type,'object_id'=>$row['object_id']);
         }
@@ -268,7 +268,7 @@ class Tag extends database_object implements library_item
         $db_results = Dba::read($sql, array($this->id));
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = array('id'=>$row['id'], 'name'=>$row['name']);
         }
 
@@ -386,7 +386,7 @@ class Tag extends database_object implements library_item
         $sql        = "SELECT * FROM `tag` WHERE `name` = ?";
         $db_results = Dba::read($sql, array($value));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         parent::add_to_cache('tag_name',$results['name'],$results['id']);
 
@@ -408,7 +408,7 @@ class Tag extends database_object implements library_item
             "WHERE (`tag_map`.`tag_id` = ? OR `tag_map`.`tag_id` = `tag_merge`.`merged_to`) AND `tag_map`.`user` = ? AND `tag_map`.`object_id` = ? AND `tag_map`.`object_type` = ?";
         $db_results = Dba::read($sql, array($tag_id, $user, $object_id, $type));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['id'];
     } // tag_map_exists
@@ -435,7 +435,7 @@ class Tag extends database_object implements library_item
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = array('user'=>$row['user'], 'id'=>$row['tag_id'], 'name'=>$row['name']);
         }
 
@@ -460,7 +460,7 @@ class Tag extends database_object implements library_item
         $results    = array();
         $db_results = Dba::read($sql, array($type, $id));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row;
         }
 
@@ -495,7 +495,7 @@ class Tag extends database_object implements library_item
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['object_id'];
         }
 
@@ -536,7 +536,7 @@ class Tag extends database_object implements library_item
         }
 
         $db_results = Dba::read($sql);
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['tag_id']] = array('id'=>$row['tag_id'], 'name'=>$row['name'], 'is_hidden'=>$row['is_hidden'], 'count'=>$row['count']);
         }
 
@@ -678,7 +678,7 @@ class Tag extends database_object implements library_item
         $sql        = "SELECT DISTINCT(`object_type`), COUNT(`object_id`) AS `count` FROM `tag_map` WHERE `tag_id` = ?" .  $filter_sql . " GROUP BY `object_type`";
         $db_results = Dba::read($sql, $params);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['object_type']] = $row['count'];
         }
 
@@ -717,35 +717,35 @@ class Tag extends database_object implements library_item
         return $keywords;
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->name;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         return array();
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         return array();
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if ($filter_type) {
-            $ids = Tag::get_tag_objects($filter_type, $this->id);
+        if ($filterType) {
+            $ids = Tag::get_tag_objects($filterType, $this->id);
             if ($ids) {
                 foreach ($ids as $id) {
                     $medias[] = array(
-                        'object_type' => $filter_type,
+                        'object_type' => $filterType,
                         'object_id' => $id
                     );
                 }
@@ -760,7 +760,7 @@ class Tag extends database_object implements library_item
      * Get all catalog ids related to this item.
      * @return int[]
      */
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array();
     }
@@ -783,7 +783,7 @@ class Tag extends database_object implements library_item
     public function display_art($thumb = 2)
     {
         if (Art::has_db($this->id, 'tag')) {
-            Art::display('tag', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('tag', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 } // end of Tag class

@@ -191,7 +191,7 @@ class TVShow_Episode extends Video
         return $keywords;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return array('object_type' => 'tvshow_season', 'object_id' => $this->season);
     }
@@ -235,7 +235,7 @@ class TVShow_Episode extends Video
         }
 
         if ($id !== null && $type !== null) {
-            Art::display($type, $id, $this->get_fullname(), $thumb, $this->link);
+            Art::display($type, $id, $this->getFullname(), $thumb, $this->link);
         }
     }
 

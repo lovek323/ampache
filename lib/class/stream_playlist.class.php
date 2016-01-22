@@ -59,7 +59,7 @@ class Stream_Playlist
             $sql        = 'SELECT * FROM `stream_playlist` WHERE `sid` = ? ORDER BY `id`';
             $db_results = Dba::read($sql, array($this->id));
 
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $this->urls[] = new Stream_URL($row);
             }
         }

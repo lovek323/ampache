@@ -25,7 +25,7 @@
  * Search-related voodoo.  Beware tentacles.
  */
 
-class Search extends playlist_object
+class Search extends playlist_objectAbstract
 {
     public $searchtype;
     public $rules;
@@ -402,7 +402,7 @@ class Search extends playlist_object
             );
 
             $metadataFields          = array();
-            $metadataFieldRepository = new \Lib\Metadata\Repository\MetadataField();
+            $metadataFieldRepository = new \Lib\Metadata\Repository\MetadataFieldRepository();
             foreach ($metadataFieldRepository->findAll() as $metadata) {
                 $metadataFields[$metadata->getId()] = $metadata->getName();
             }
@@ -626,7 +626,7 @@ class Search extends playlist_object
     {
         $sql        = "SELECT `name` FROM `search` WHERE `id` = '$id'";
         $db_results = Dba::read($sql);
-        $r          = Dba::fetch_assoc($db_results);
+        $r          = Dba::fetchAssoc($db_results);
         return $r['name'];
     }
 
@@ -643,7 +643,7 @@ class Search extends playlist_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -694,7 +694,7 @@ class Search extends playlist_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -757,7 +757,7 @@ class Search extends playlist_object
         }
 
         $db_results = Dba::read($sql);
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array(
                 'object_id' => $row['id'],
                 'object_type' => $this->searchtype
@@ -794,7 +794,7 @@ class Search extends playlist_object
 
         $db_results = Dba::read($sql);
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = array(
                 'object_id' => $row['id'],
                 'object_type' => $this->searchtype

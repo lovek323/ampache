@@ -26,7 +26,7 @@
  * This is the class responsible for handling the Label object
  * it is related to the label table in the database.
  */
-class Label extends database_object implements library_item
+class Label extends AbstractDatabaseObject implements LibraryItemInterface
 {
     /* Variables from DB */
 
@@ -100,7 +100,7 @@ class Label extends database_object implements library_item
     public function display_art($thumb)
     {
         if (Art::has_db($this->id, 'label')) {
-            Art::display('label', $this->id, $this->get_fullname(), $thumb, $this->link);
+            Art::display('label', $this->id, $this->getFullname(), $thumb, $this->link);
         }
     }
 
@@ -112,12 +112,12 @@ class Label extends database_object implements library_item
         $this->artists      = count($this->get_artists());
     }
 
-    public function get_catalogs()
+    public function getCatalogIds()
     {
         return array();
     }
 
-    public function get_childrens()
+    public function getChildren()
     {
         $medias  = array();
         $artists = $this->get_artists();
@@ -140,7 +140,7 @@ class Label extends database_object implements library_item
         return $this->summary;
     }
 
-    public function get_fullname()
+    public function getFullname()
     {
         return $this->f_name;
     }
@@ -154,10 +154,10 @@ class Label extends database_object implements library_item
         return $keywords;
     }
 
-    public function get_medias($filter_type = null)
+    public function getMedia($filterType = null)
     {
         $medias = array();
-        if (!$filter_type || $filter_type == 'song') {
+        if (!$filterType || $filterType == 'song') {
             $songs = $this->get_songs();
             foreach ($songs as $song_id) {
                 $medias[] = array(
@@ -169,7 +169,7 @@ class Label extends database_object implements library_item
         return $medias;
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return null;
     }
@@ -179,7 +179,7 @@ class Label extends database_object implements library_item
         return $this->user;
     }
 
-    public function search_childrens($name)
+    public function searchChildren($name)
     {
         $search['type']            = "artist";
         $search['rule_0_input']    = $name;
@@ -278,7 +278,7 @@ class Label extends database_object implements library_item
                 $params[] = $id;
             }
             $db_results = Dba::read($sql, $params);
-            if ($row = Dba::fetch_assoc($db_results)) {
+            if ($row = Dba::fetchAssoc($db_results)) {
                 $ret = $row['id'];
             }
         }
@@ -296,7 +296,7 @@ class Label extends database_object implements library_item
         $sql        = "SELECT `artist` FROM `label_asso` WHERE `label` = ?";
         $db_results = Dba::read($sql, array($this->id));
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['artist'];
         }
 
@@ -335,7 +335,7 @@ class Label extends database_object implements library_item
         $db_results = Dba::read($sql, array($this->name));
 
         $results = array();
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r['id'];
         }
 
@@ -362,7 +362,7 @@ class Label extends database_object implements library_item
         $sql        = "SELECT `id`, `name` FROM `label`";
         $db_results = Dba::read($sql);
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = $row['name'];
         }
         return $results;
@@ -375,7 +375,7 @@ class Label extends database_object implements library_item
                "WHERE `label_asso`.`artist` = ?";
         $db_results = Dba::read($sql, array($artist_id));
         $results    = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[$row['id']] = $row['name'];
         }
         return $results;

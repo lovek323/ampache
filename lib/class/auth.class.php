@@ -142,7 +142,7 @@ class Auth
             $sql        = 'SELECT `password` FROM `user` WHERE `username` = ?';
             $db_results = Dba::read($sql, array($username));
 
-            if ($row = Dba::fetch_assoc($db_results)) {
+            if ($row = Dba::fetchAssoc($db_results)) {
                 // Use SHA2 now... cooking with fire.
                 // For backwards compatibility we hash a couple of different
                 // variations of the password. Increases collision chances, but

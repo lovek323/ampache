@@ -88,7 +88,7 @@ class Query
             $sql = 'SELECT `data` FROM `tmp_browse` WHERE `id` = ? AND `sid` = ?';
 
             $db_results = Dba::read($sql, array($id, $sid));
-            if ($results = Dba::fetch_assoc($db_results)) {
+            if ($results = Dba::fetchAssoc($db_results)) {
                 $this->id     = $id;
                 $this->_state = (array) self::_unserialize($results['data']);
 
@@ -916,7 +916,7 @@ class Query
                 'WHERE `sid` = ? AND `id` = ?';
             $db_results = Dba::read($sql, array(session_id(), $this->id));
 
-            $row = Dba::fetch_assoc($db_results);
+            $row = Dba::fetchAssoc($db_results);
 
             $this->_cache = (array) self::_unserialize($row['object_data']);
             return $this->_cache;
@@ -942,7 +942,7 @@ class Query
         $db_results = Dba::read($sql);
 
         $results = array();
-        while ($data = Dba::fetch_assoc($db_results)) {
+        while ($data = Dba::fetchAssoc($db_results)) {
             $results[] = $data;
         }
 
@@ -2343,7 +2343,7 @@ class Query
         $db_results = Dba::read($sql);
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

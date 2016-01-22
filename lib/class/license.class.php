@@ -69,7 +69,7 @@ class License
         $sql        = "SELECT * FROM `license` WHERE `id` = ?";
         $db_results = Dba::read($sql, array($id));
 
-        $data = Dba::fetch_assoc($db_results);
+        $data = Dba::fetchAssoc($db_results);
 
         foreach ($data as $key=>$value) {
             $this->$key = $value;
@@ -139,7 +139,7 @@ class License
         $db_results = Dba::read($sql);
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

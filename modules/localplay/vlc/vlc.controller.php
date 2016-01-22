@@ -151,7 +151,7 @@ class AmpacheVlc extends localplay_controller
 
             $results = array();
 
-            while ($row = Dba::fetch_assoc($db_results)) {
+            while ($row = Dba::fetchAssoc($db_results)) {
                 $results[$row['id']] = $row['name'];
             }
 
@@ -196,7 +196,7 @@ class AmpacheVlc extends localplay_controller
         $sql        = "SELECT * FROM `localplay_vlc` WHERE `id` = ?";
         $db_results = Dba::query($sql, array($instance));
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
         return $row;
     } // get_instance
@@ -490,7 +490,7 @@ class AmpacheVlc extends localplay_controller
                                         $sql      = "SELECT `name` FROM `live_stream` WHERE `url`='$filename' ";
 
                                         $db_results = Dba::read($sql);
-                                        if ($row = Dba::fetch_assoc($db_results)) {
+                                        if ($row = Dba::fetchAssoc($db_results)) {
                                             //if stream is known just send name
                                            $data['name'] = htmlspecialchars(substr($row['name'], 0, 50));
                                         }

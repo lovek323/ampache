@@ -34,7 +34,7 @@ $sql = "SELECT `image`,`id`,object_id,object_type,size FROM `image`";
 $db_results = Dba::read($sql);
 $results = array();
 
-while ($row = Dba::fetch_assoc($db_results)) {
+while ($row = Dba::fetchAssoc($db_results)) {
     if ($inDisk)
 	    $source = Art::get_from_source(array('file' => Art::get_dir_on_disk($row['object_type'], $row['object_id'], 'default').'art-'.$row['size'].'.jpg'), $row['object_type']);
     else

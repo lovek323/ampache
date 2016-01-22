@@ -140,7 +140,7 @@ require $prefix . '/templates/install_header.inc.php';
         <select class="form-control" id="transcode_template" name="transcode_template">
         <option value=""><?php echo T_('None'); ?></option>
         <?php
-            $modes = install_get_transcode_modes();
+            $modes = installGetTranscodeModules();
             foreach ($modes as $mode) {
                 ?>
             <option value="<?php echo $mode;
@@ -211,7 +211,7 @@ require $prefix . '/templates/install_header.inc.php';
     echo "in";
 } ?>">
             <div class="panel-body">
-                <?php if (install_check_server_apache()) {
+                <?php if (installCheckServerApache()) {
     ?>
                     <div class="col-sm-4">&nbsp;</div><div class="col-sm-8">&nbsp;</div>
                     <div class="col-sm-4 control-label">
@@ -235,7 +235,7 @@ require $prefix . '/templates/install_header.inc.php';
     ?></div>
                     <div class="col-sm-4 control-label"><?php echo T_('channel/.htaccess configured?');
     ?></div>
-                    <div class="col-sm-8"><?php echo debug_result(install_check_rewrite_rules($htaccess_channel_file, $web_path_guess));
+                    <div class="col-sm-8"><?php echo debug_result(installCheckRewriteRules($htaccess_channel_file, $web_path_guess));
     ?></div>
 
                     <div class="col-sm-4">&nbsp;</div><div class="col-sm-8">&nbsp;</div>
@@ -260,7 +260,7 @@ require $prefix . '/templates/install_header.inc.php';
     ?></div>
                     <div class="col-sm-4 control-label"><?php echo T_('rest/.htaccess configured?');
     ?></div>
-                    <div class="col-sm-8"><?php echo debug_result(install_check_rewrite_rules($htaccess_rest_file, $web_path_guess));
+                    <div class="col-sm-8"><?php echo debug_result(installCheckRewriteRules($htaccess_rest_file, $web_path_guess));
     ?></div>
 
                     <div class="col-sm-4">&nbsp;</div><div class="col-sm-8">&nbsp;</div>
@@ -285,7 +285,7 @@ require $prefix . '/templates/install_header.inc.php';
     ?></div>
                     <div class="col-sm-4 control-label"><?php echo T_('play/.htaccess configured?');
     ?></div>
-                    <div class="col-sm-8"><?php echo debug_result(install_check_rewrite_rules($htaccess_play_file, $web_path_guess));
+                    <div class="col-sm-8"><?php echo debug_result(installCheckRewriteRules($htaccess_play_file, $web_path_guess));
     ?></div>
                 <?php 
 } ?>

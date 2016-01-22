@@ -20,21 +20,27 @@
  *
  */
 
-namespace Lib\Metadata\Repository;
-
 /**
- * Description of Metadata
+ * library_item Interface
  *
- * @author raziel
+ * This defines how the media file classes should
+ * work, this lists all required functions and the expected
+ * input
  */
-class Metadata extends \Lib\Repository
+interface LibraryItemInterface extends PlayableItemInterface
 {
-    protected $modelClassName = '\Lib\Metadata\Model\Metadata';
+    public function get_keywords();
 
-    public static function gc()
-    {
-        \Dba::write('DELETE FROM `metadata` USING `metadata` LEFT JOIN `song` ON `song`.`id` = `metadata`.`object_id` WHERE `song`.`id` IS NULL');
-    }
+    public function get_user_owner();
 
-    //put your code here
-}
+    public function get_default_art_kind();
+
+    public function get_description();
+
+    public function display_art($thumb);
+
+    public function update(array $data);
+
+    public static function gc();
+} // end interface
+

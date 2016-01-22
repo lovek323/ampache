@@ -28,7 +28,7 @@
  * visit user_vote from time to time.
  *
  */
-class Tmp_Playlist extends database_object
+class Tmp_Playlist extends AbstractDatabaseObject
 {
     /* Variables from the Datbase */
     public $id;
@@ -72,7 +72,7 @@ class Tmp_Playlist extends database_object
         $sql        = "SELECT * FROM `tmp_playlist` WHERE `id`='" . Dba::escape($this->id) . "'";
         $db_results = Dba::read($sql);
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results;
     } // _get_info
@@ -124,7 +124,7 @@ class Tmp_Playlist extends database_object
             "ORDER BY `session`.`expire` DESC";
         $db_results = Dba::read($sql);
 
-        $data = Dba::fetch_assoc($db_results);
+        $data = Dba::fetchAssoc($db_results);
 
         return $data['id'];
     } // get_from_userid
@@ -145,7 +145,7 @@ class Tmp_Playlist extends database_object
         $items = array();
 
         $i = 1;
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             $items[]     = array(
                 'object_type' => $results['object_type'],
                 'object_id' => $results['object_id'],
@@ -169,7 +169,7 @@ class Tmp_Playlist extends database_object
             "WHERE `tmp_playlist`='$id' ORDER BY `id` LIMIT 1";
         $db_results = Dba::read($sql);
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['object_id'];
     } // get_next_object

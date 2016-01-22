@@ -26,7 +26,7 @@
  * This tracks ratings for songs, albums, artists, videos, tvshows, movies ...
  *
  */
-class Rating extends database_object
+class Rating extends AbstractDatabaseObject
 {
     // Public variables
     public $id;        // The ID of the object rated
@@ -88,7 +88,7 @@ class Rating extends database_object
             "AND `object_type` = ?";
         $db_results = Dba::read($sql, array($GLOBALS['user']->id, $type));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $user_ratings[$row['object_id']] = $row['rating'];
         }
 
@@ -97,7 +97,7 @@ class Rating extends database_object
             "`object_type` = ? GROUP BY `object_id`";
         $db_results = Dba::read($sql, array($type));
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $ratings[$row['object_id']] = $row['rating'];
         }
 
@@ -144,7 +144,7 @@ class Rating extends database_object
 
          $rating = 0;
 
-         if ($results = Dba::fetch_assoc($db_results)) {
+         if ($results = Dba::fetchAssoc($db_results)) {
              $rating = $results['rating'];
          }
 
@@ -167,7 +167,7 @@ class Rating extends database_object
             "`object_id` = ? AND `object_type` = ?";
         $db_results = Dba::read($sql, array($this->id, $this->type));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         parent::add_to_cache('rating_' . $this->type . '_all', $this->id, $results['rating']);
         return $results['rating'];
@@ -212,7 +212,7 @@ class Rating extends database_object
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

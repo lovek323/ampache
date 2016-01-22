@@ -220,7 +220,7 @@ class Api
                 // catalog information in an RFC 2822 Format
                 $sql        = 'SELECT MAX(`last_update`) AS `update`, MAX(`last_add`) AS `add`, MAX(`last_clean`) AS `clean` FROM `catalog`';
                 $db_results = Dba::read($sql);
-                $row        = Dba::fetch_assoc($db_results);
+                $row        = Dba::fetchAssoc($db_results);
 
                 // Now we need to quickly get the song totals
                 $sql = 'SELECT COUNT(`id`) AS `song`, ' .
@@ -228,20 +228,20 @@ class Api
                     'COUNT(DISTINCT(`artist`)) AS `artist` ' .
                     'FROM `song`';
                 $db_results = Dba::read($sql);
-                $counts     = Dba::fetch_assoc($db_results);
+                $counts     = Dba::fetchAssoc($db_results);
 
                 // Next the video counts
                 $sql        = "SELECT COUNT(`id`) AS `video` FROM `video`";
                 $db_results = Dba::read($sql);
-                $vcounts    = Dba::fetch_assoc($db_results);
+                $vcounts    = Dba::fetchAssoc($db_results);
 
                 $sql        = "SELECT COUNT(`id`) AS `playlist` FROM `playlist`";
                 $db_results = Dba::read($sql);
-                $playlist   = Dba::fetch_assoc($db_results);
+                $playlist   = Dba::fetchAssoc($db_results);
 
                 $sql        = "SELECT COUNT(`id`) AS `catalog` FROM `catalog` WHERE `catalog_type`='local'";
                 $db_results = Dba::read($sql);
-                $catalog    = Dba::fetch_assoc($db_results);
+                $catalog    = Dba::fetchAssoc($db_results);
 
                 echo XML_Data::keyed_array(array('auth'=>$token,
                     'api'=>self::$version,

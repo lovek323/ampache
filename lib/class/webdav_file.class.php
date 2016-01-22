@@ -33,7 +33,7 @@ class WebDAV_File extends DAV\File
 {
     private $libitem;
 
-    public function __construct(media $libitem)
+    public function __construct(MediaInterface $libitem)
     {
         $this->libitem = $libitem;
         $this->libitem->format();

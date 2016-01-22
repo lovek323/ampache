@@ -119,7 +119,7 @@ class Access
         $sql        = 'SELECT * FROM `access_list` WHERE `id` = ?';
         $db_results = Dba::read($sql, array($this->id));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results;
     }
@@ -255,7 +255,7 @@ class Access
             'AND `type` = ? AND `user` = ?';
         $db_results = Dba::read($sql, array($start, $end, $type, $user));
 
-        if (Dba::fetch_assoc($db_results)) {
+        if (Dba::fetchAssoc($db_results)) {
             return true;
         }
 
@@ -439,7 +439,7 @@ class Access
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 

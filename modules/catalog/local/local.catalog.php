@@ -141,7 +141,7 @@ class Catalog_local extends Catalog
         $catalog_paths  = array();
         $component_path = $path;
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $catalog_paths[$row['path']] = $row['catalog_id'];
         }
 
@@ -541,13 +541,13 @@ class Catalog_local extends Catalog
         $db_results = Dba::read($sql);
 
         if (AmpConfig::get('memory_cache')) {
-            while ($row = Dba::fetch_assoc($db_results, false)) {
+            while ($row = Dba::fetchAssoc($db_results, false)) {
                 $media_ids[] = $row['id'];
             }
             $media_type::build_cache($media_ids);
             $db_results = Dba::read($sql);
         }
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $count++;
             if (UI::check_ticker()) {
                 $file = str_replace(array('(',')','\''), '', $row['file']);
@@ -619,8 +619,8 @@ class Catalog_local extends Catalog
             }
         }
 
-        \Lib\Metadata\Repository\Metadata::gc();
-        \Lib\Metadata\Repository\MetadataField::gc();
+        \Lib\Metadata\Repository\MetadataRepository::gc();
+        \Lib\Metadata\Repository\MetadataFieldRepository::gc();
         return $dead_total;
     }
 
@@ -639,7 +639,7 @@ class Catalog_local extends Catalog
             "WHERE `catalog`='$this->id' LIMIT $count,$chunk_size";
         $db_results = Dba::read($sql);
 
-        while ($results = Dba::fetch_assoc($db_results)) {
+        while ($results = Dba::fetchAssoc($db_results)) {
             debug_event('clean', 'Starting work on ' . $results['file'] . '(' . $results['id'] . ')', 5);
             $count++;
             if (UI::check_ticker()) {

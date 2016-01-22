@@ -143,7 +143,7 @@ class Stats
         $db_results = Dba::read($sql, array($user, $type, $oid, $count_type, $delay));
         $results    = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -168,7 +168,7 @@ class Stats
 
         $db_results = Dba::read($sql, array($object_type, $object_id, $count_type));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results['object_cnt'];
     } // get_object_count
@@ -178,7 +178,7 @@ class Stats
         $name       = null;
         $sql        = "SELECT `geo_name` FROM `object_count` WHERE `geo_latitude` = ? AND `geo_longitude` = ? AND `geo_name` IS NOT NULL ORDER BY `id` DESC LIMIT 1";
         $db_results = Dba::read($sql, array($latitude, $longitude));
-        if ($results = Dba::fetch_assoc($db_results)) {
+        if ($results = Dba::fetchAssoc($db_results)) {
             $name = $results['geo_name'];
         }
         return $name;
@@ -207,7 +207,7 @@ class Stats
         $sql .= "ORDER BY `object_count`.`date` DESC LIMIT 1";
         $db_results = Dba::read($sql, array($user_id));
 
-        $results = Dba::fetch_assoc($db_results);
+        $results = Dba::fetchAssoc($db_results);
 
         return $results;
     } // get_last_song
@@ -235,7 +235,7 @@ class Stats
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['object_id'];
         }
 
@@ -290,7 +290,7 @@ class Stats
 
         $results = array();
 
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
         return $results;
@@ -342,7 +342,7 @@ class Stats
         $db_results = Dba::read($sql);
 
         $results = array();
-        while ($row = Dba::fetch_assoc($db_results)) {
+        while ($row = Dba::fetchAssoc($db_results)) {
             $results[] = $row['id'];
         }
 
@@ -375,7 +375,7 @@ class Stats
 
         $results = array();
 
-        while ($r = Dba::fetch_assoc($db_results)) {
+        while ($r = Dba::fetchAssoc($db_results)) {
             $results[] = $r;
         }
 

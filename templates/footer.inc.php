@@ -56,7 +56,7 @@
             <?php echo T_('Queries:');
     ?><?php echo Dba::$stats['query'];
     ?> <?php echo T_('Cache Hits:');
-    ?><?php echo database_object::$cache_hit;
+    ?><?php echo AbstractDatabaseObject::$cache_hit;
     ?>
             <?php
                 $load_time_end = microtime(true);

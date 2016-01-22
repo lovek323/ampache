@@ -28,9 +28,9 @@
  * caching for all of the objects to cut down on the database calls
  *
  */
-abstract class database_object
+abstract class AbstractDatabaseObject
 {
-    private static $object_cache = array();
+    private static $object_cache = [];
 
     // Statistics for debugging
     public static $cache_hit = 0;
@@ -39,30 +39,33 @@ abstract class database_object
     /**
      * get_info
      * retrieves the info from the database and puts it in the cache
+     * @param $id
+     * @param string $table_name
+     * @return array|bool
      */
-    public function get_info($id,$table_name='')
+    public function get_info($id, $table_name = '')
     {
         $table_name = $table_name ? Dba::escape($table_name) : Dba::escape(strtolower(get_class($this)));
 
         // Make sure we've got a real id
         if (!is_numeric($id)) {
-            return array();
+            return [];
         }
 
-        if (self::is_cached($table_name,$id)) {
-            return self::get_from_cache($table_name,$id);
+        if (self::is_cached($table_name, $id)) {
+            return self::get_from_cache($table_name, $id);
         }
 
-        $sql        = "SELECT * FROM `$table_name` WHERE `id`='$id'";
+        $sql = "SELECT * FROM `$table_name` WHERE `id`='$id'";
         $db_results = Dba::read($sql);
 
         if (!$db_results) {
-            return array();
+            return [];
         }
 
-        $row = Dba::fetch_assoc($db_results);
+        $row = Dba::fetchAssoc($db_results);
 
-        self::add_to_cache($table_name,$id,$row);
+        self::add_to_cache($table_name, $id, $row);
 
         return $row;
     } // get_info
@@ -72,12 +75,15 @@ abstract class database_object
      */
     public static function clear_cache()
     {
-        self::$object_cache = array();
+        self::$object_cache = [];
     }
 
     /**
      * is_cached
      * this checks the cache to see if the specified object is there
+     * @param $index
+     * @param $id
+     * @return bool
      */
     public static function is_cached($index, $id)
     {
@@ -92,6 +98,9 @@ abstract class database_object
     /**
      * get_from_cache
      * This attempts to retrieve the specified object from the cache we've got here
+     * @param $index
+     * @param $id
+     * @return bool
      */
     public static function get_from_cache($index, $id)
     {
@@ -107,23 +116,29 @@ abstract class database_object
     /**
      * add_to_cache
      * This adds the specified object to the specified index in the cache
+     * @param $index
+     * @param $id
+     * @param $data
+     * @return bool|null
      */
     public static function add_to_cache($index, $id, $data)
     {
         if (!self::$_enabled) {
             return false;
         }
-
-        $value                           = is_null($data) ? false : $data;
+        $value = is_null($data) ? false : $data;
         self::$object_cache[$index][$id] = $value;
-    } // add_to_cache
+        return null;
+    }
 
     /**
      * remove_from_cache
      * This function clears something from the cache, there are a few places we need to do this
      * in order to have things display correctly
+     * @param $index
+     * @param $id
      */
-    public static function remove_from_cache($index,$id)
+    public static function remove_from_cache($index, $id)
     {
         if (isset(self::$object_cache[$index]) && isset(self::$object_cache[$index][$id])) {
             unset(self::$object_cache[$index][$id]);

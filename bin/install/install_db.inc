@@ -64,7 +64,7 @@ if (!$db_user || !$db_pass || !$db_host || !$db_name) {
 }
 
 // Now let's make sure it's not already installed
-if (!install_check_status($configfile)) { 
+if (!installCheckStatus($configfile)) {
     echo "\n", T_('Existing Ampache installation found.'), "\n";
     if ($force) {
         echo T_('Force specified, proceeding anyway.'), "\n";
