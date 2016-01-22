@@ -252,7 +252,7 @@ $button_flip_state_id = 'button_flip_state_' . $song->id;
       }
   }
 
-  $owner_id = $song->get_user_owner();
+  $owner_id = $song->getUserOwner();
   if (AmpConfig::get('sociable') && $owner_id > 0) {
       $owner = new User($owner_id);
       $owner->format();

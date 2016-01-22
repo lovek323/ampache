@@ -370,7 +370,7 @@ class Album extends AbstractDatabaseObject implements LibraryItemInterface
             return false;
         }
 
-        $owner = $this->get_user_owner();
+        $owner = $this->getUserOwner();
         return ($owner && $owner === $user);
     }
 
@@ -667,7 +667,7 @@ class Album extends AbstractDatabaseObject implements LibraryItemInterface
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords               = array();
         $keywords['mb_albumid'] = array('important' => false,
@@ -782,33 +782,33 @@ class Album extends AbstractDatabaseObject implements LibraryItemInterface
      * Get item's owner.
      * @return int|null
      */
-    public function get_user_owner()
+    public function getUserOwner()
     {
         if (!$this->album_artist) {
             return null;
         }
 
         $artist = new Artist($this->album_artist);
-        return $artist->get_user_owner();
+        return $artist->getUserOwner();
     }
 
     /**
      * Get default art kind for this item.
      * @return string
      */
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         // Album description is not supported yet, always return artist description
         $artist = new Artist($this->artist_id);
-        return $artist->get_description();
+        return $artist->getDescription();
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id   = null;
         $type = null;

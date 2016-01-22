@@ -35,7 +35,7 @@ UI::show_box_top(T_('Manage Democratic Playlists'));  ?>
         foreach ($playlists as $democratic_id) {
             $democratic = new Democratic($democratic_id);
             $democratic->format();
-            $playlist = new Playlist($democratic->base_playlist);
+            $playlist = new PlaylistPlaylist($democratic->base_playlist);
             $playlist->format();
             ?>
     <tr class="<?php echo UI::flip_class();

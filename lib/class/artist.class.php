@@ -491,7 +491,7 @@ class Artist extends AbstractDatabaseObject implements LibraryItemInterface
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords                = array();
         $keywords['mb_artistid'] = array('important' => false,
@@ -600,7 +600,7 @@ class Artist extends AbstractDatabaseObject implements LibraryItemInterface
      * Get item's owner.
      * @return int|null
      */
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return $this->user;
     }
@@ -609,17 +609,17 @@ class Artist extends AbstractDatabaseObject implements LibraryItemInterface
      * Get default art kind for this item.
      * @return string
      */
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return $this->summary;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id   = null;
         $type = null;

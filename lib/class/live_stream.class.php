@@ -102,7 +102,7 @@ class Live_Stream extends AbstractDatabaseObject implements MediaInterface, Libr
         return true;
     } // format
 
-    public function get_keywords()
+    public function getKeywords()
     {
         return array();
     }
@@ -150,22 +150,22 @@ class Live_Stream extends AbstractDatabaseObject implements MediaInterface, Libr
         return array($this->catalog);
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return null;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         if (Art::has_db($this->id, 'live_stream')) {
             Art::display('live_stream', $this->id, $this->getFullname(), $thumb, $this->link);

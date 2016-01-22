@@ -233,7 +233,7 @@ class Browse extends Query
                 $box_req   = AmpConfig::get('prefix') . UI::find_template('show_live_streams.inc.php');
             break;
             case 'playlist':
-                Playlist::build_cache($object_ids);
+                PlaylistPlaylist::build_cache($object_ids);
                 $box_title = T_('Playlists') . $match;
                 $box_req   = AmpConfig::get('prefix') . UI::find_template('show_playlists.inc.php');
             break;

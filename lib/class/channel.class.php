@@ -197,7 +197,7 @@ class Channel extends AbstractDatabaseObject implements MediaInterface, LibraryI
         }
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
         return array();
     }
@@ -234,22 +234,22 @@ class Channel extends AbstractDatabaseObject implements MediaInterface, LibraryI
         return $medias;
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         if (Art::has_db($this->id, 'channel')) {
             Art::display('channel', $this->id, $this->getFullname(), $thumb, $this->link);
@@ -260,7 +260,7 @@ class Channel extends AbstractDatabaseObject implements MediaInterface, LibraryI
     {
         $object = null;
         if ($this->object_type == 'playlist') {
-            $object = new Playlist($this->object_id);
+            $object = new PlaylistPlaylist($this->object_id);
             $object->format();
         }
 

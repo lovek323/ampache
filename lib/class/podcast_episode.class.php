@@ -146,7 +146,7 @@ class Podcast_Episode extends AbstractDatabaseObject implements MediaInterface, 
         return true;
     }
     
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords            = array();
         $keywords['podcast'] = array('important' => true,
@@ -191,22 +191,22 @@ class Podcast_Episode extends AbstractDatabaseObject implements MediaInterface, 
         return $medias;
     }
     
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return $this->f_description;
     }
     
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id   = null;
         $type = null;

@@ -47,7 +47,7 @@ if (Art::is_enabled()) {
 <td class="cel_cover">
     <?php
     $art_showed = false;
-    if ($libitem->get_default_art_kind() == 'preview') {
+    if ($libitem->getDefaultArtKind() == 'preview') {
         $art_showed = Art::display('video', $libitem->id, $libitem->f_title, 9, $libitem->link, false, 'preview');
     }
     if (!$art_showed) {

@@ -1,24 +1,4 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
 // Minimal init for use in install
 
@@ -51,7 +31,7 @@ require_once $prefix . '/lib/class/core.class.php';
 AmpConfig::set('prefix', $prefix);
 
 // Register autoloaders
-spl_autoload_register(array('Core', 'autoload'), true, true);
+spl_autoload_register(['Core', 'autoload'], true, true);
 $composer_autoload = $prefix . '/lib/vendor/autoload.php';
 if (file_exists($composer_autoload)) {
     require_once $composer_autoload;
@@ -94,12 +74,13 @@ require_once $prefix . '/lib/class/AbstractDatabaseObject.php';
 require_once $prefix . '/lib/class/mediaInterface.interface.php';
 require_once $prefix . '/lib/class/PlayableItemInterface.php';
 require_once $prefix . '/lib/class/libraryItemInterface.interface.php';
-require_once $prefix . '/lib/class/playlist_object.abstract.php';
 require_once $prefix . '/modules/horde/Browser.php';
 
 /* Set up the flip class */
-UI::flip_class(array('odd', 'even'));
+UI::flip_class(['odd', 'even']);
 
 // Merge GET then POST into REQUEST effectively stripping COOKIE without
 // depending on a PHP setting change for the effect
 $_REQUEST = array_merge($_GET, $_POST);
+
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

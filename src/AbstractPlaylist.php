@@ -1,30 +1,16 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
+namespace Ampache;
+
+use Access;
+use LibraryItemInterface;
+use UI;
+use User;
 
 /**
- * playlist_object
- * Abstracting out functionality needed by both normal and smart playlists
+ * Abstracting out functionality needed by both normal and smart playlists.
  */
-abstract class playlist_objectAbstract extends AbstractDatabaseObject implements LibraryItemInterface
+abstract class AbstractPlaylist extends AbstractDatabaseObject implements LibraryItemInterface
 {
     // Database variables
     /**
@@ -57,16 +43,17 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
      */
     public $f_user;
 
-    abstract public function get_items();
+    abstract public function getItems();
 
     /**
      * format
      * This takes the current playlist object and gussies it up a little
      * bit so it is presentable to the users
+     * @param bool $details
      */
     public function format($details = true)
     {
-        $this->f_name =  $this->name;
+        $this->f_name = $this->name;
         $this->f_type = ($this->type == 'private') ? UI::get_icon('lock', T_('Private')) : '';
 
         if ($details) {
@@ -81,7 +68,7 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
      * This function returns true or false if the current user
      * has access to this playlist
      */
-    public function has_access()
+    public function hasAccess()
     {
         if (!Access::check('interface', 25)) {
             return false;
@@ -95,9 +82,9 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
 
     public function getMedia($filterType = null)
     {
-        $medias = $this->get_items();
+        $medias = $this->getItems();
         if ($filterType) {
-            $nmedias = array();
+            $nmedias = [];
             foreach ($medias as $media) {
                 if ($media['object_type'] == $filterType) {
                     $nmedias[] = $media;
@@ -108,9 +95,9 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
         return $medias;
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
-        return array();
+        return [];
     }
 
     public function getFullname()
@@ -125,39 +112,39 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
 
     public function getChildren()
     {
-        $childrens = array();
-        $items     = $this->get_items();
+        $childrens = [];
+        $items = $this->getItems();
         foreach ($items as $item) {
             if (!in_array($item['object_type'], $childrens)) {
-                $childrens[$item['object_type']] = array();
+                $childrens[$item['object_type']] = [];
             }
             $childrens[$item['object_type']][] = $item['object_id'];
         }
 
-        return $this->get_items();
+        return $this->getItems();
     }
 
     public function searchChildren($name)
     {
-        return array();
+        return [];
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return $this->user;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return null;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         // no art
     }
@@ -170,7 +157,8 @@ abstract class playlist_objectAbstract extends AbstractDatabaseObject implements
      */
     public function getCatalogIds()
     {
-        return array();
+        return [];
     }
-} // end playlist_object
+}
 
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

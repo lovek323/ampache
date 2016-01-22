@@ -147,7 +147,7 @@ class TVShow_Season extends AbstractDatabaseObject implements LibraryItemInterfa
         return true;
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords           = array();
         $keywords['tvshow'] = array('important' => true,
@@ -210,24 +210,24 @@ class TVShow_Season extends AbstractDatabaseObject implements LibraryItemInterfa
         return array($this->catalog_id);
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         // No season description for now, always return tvshow description
         $tvshow = new TVShow($this->tvshow);
-        return $tvshow->get_description();
+        return $tvshow->getDescription();
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id   = null;
         $type = null;

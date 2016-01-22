@@ -26,7 +26,7 @@ require_once 'lib/init.php';
 // We special-case this so we can send a 302 if the delete succeeded
 if ($_REQUEST['action'] == 'delete_playlist') {
     // Check rights
-    $playlist = new Playlist($_REQUEST['playlist_id']);
+    $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
     if ($playlist->has_access()) {
         $playlist->delete();
         // Go elsewhere
@@ -49,7 +49,7 @@ switch ($_REQUEST['action']) {
         $playlist_name = scrub_in($_REQUEST['playlist_name']);
         $playlist_type = scrub_in($_REQUEST['type']);
 
-        $playlist_id                     = Playlist::create($playlist_name, $playlist_type);
+        $playlist_id                     = PlaylistPlaylist::create($playlist_name, $playlist_type);
         $_SESSION['data']['playlist_id'] = $playlist_id;
         show_confirmation(T_('Playlist Created'), sprintf(T_('%1$s (%2$s) has been created'), $playlist_name, $playlist_type), 'playlist.php');
     break;
@@ -58,7 +58,7 @@ switch ($_REQUEST['action']) {
         UI::access_denied();
     break;
     case 'show_playlist':
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         $playlist->format();
         $object_ids = $playlist->get_items();
         require_once AmpConfig::get('prefix') . UI::find_template('show_playlist.inc.php');
@@ -91,7 +91,7 @@ switch ($_REQUEST['action']) {
     case 'set_track_numbers':
         debug_event('playlist', 'Set track numbers called.', '5');
 
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         /* Make sure they have permission */
         if (!$playlist->has_access()) {
             UI::access_denied();
@@ -116,7 +116,7 @@ switch ($_REQUEST['action']) {
         }
     break;
     case 'add_song':
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         if (!$playlist->has_access()) {
             UI::access_denied();
             break;
@@ -139,7 +139,7 @@ switch ($_REQUEST['action']) {
     case 'remove_duplicates':
         debug_event('playlist', 'Remove duplicates called.', '5');
 
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         /* Make sure they have permission */
         if (!$playlist->has_access()) {
             UI::access_denied();
@@ -167,7 +167,7 @@ switch ($_REQUEST['action']) {
         require_once AmpConfig::get('prefix') . UI::find_template('show_playlist.inc.php');
     break;
     case 'sort_tracks':
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         if (!$playlist->has_access()) {
             access_denied();
             break;

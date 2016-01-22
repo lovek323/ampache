@@ -93,7 +93,7 @@ if (AmpConfig::get('show_played_times')) {
 ?>
 
 <?php
-$owner_id = $album->get_user_owner();
+$owner_id = $album->getUserOwner();
 if (AmpConfig::get('sociable') && $owner_id > 0) {
     $owner = new User($owner_id);
     $owner->format();

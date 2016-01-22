@@ -596,7 +596,7 @@ class Api
      */
     public static function playlist_songs($input)
     {
-        $playlist = new Playlist($input['filter']);
+        $playlist = new PlaylistPlaylist($input['filter']);
         $items    = $playlist->get_items();
 
         $songs = array();
@@ -625,7 +625,7 @@ class Api
             $type = 'public';
         }
 
-        $uid = Playlist::create($name, $type);
+        $uid = PlaylistPlaylist::create($name, $type);
         echo XML_Data::playlists(array($uid));
     }
 
@@ -637,7 +637,7 @@ class Api
     public static function playlist_delete($input)
     {
         ob_end_clean();
-        $playlist = new Playlist($input['filter']);
+        $playlist = new PlaylistPlaylist($input['filter']);
         if (!$playlist->has_access()) {
             echo XML_Data::error('401', T_('Access denied to this playlist.'));
         } else {
@@ -654,7 +654,7 @@ class Api
     public static function playlist_add_song($input)
     {
         ob_end_clean();
-        $playlist = new Playlist($input['filter']);
+        $playlist = new PlaylistPlaylist($input['filter']);
         $song     = $input['song'];
         if (!$playlist->has_access()) {
             echo XML_Data::error('401', T_('Access denied to this playlist.'));
@@ -672,7 +672,7 @@ class Api
     public static function playlist_remove_song($input)
     {
         ob_end_clean();
-        $playlist = new Playlist($input['filter']);
+        $playlist = new PlaylistPlaylist($input['filter']);
         $track    = scrub_in($input['track']);
         if (!$playlist->has_access()) {
             echo XML_Data::error('401', T_('Access denied to this playlist.'));

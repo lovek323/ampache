@@ -1194,8 +1194,8 @@ abstract class Catalog extends AbstractDatabaseObject
         if ($libitem->id) {
             if (count($options) == 0) {
                 // Only search on items with default art kind as `default`.
-                if ($libitem->get_default_art_kind() == 'default') {
-                    $keywords = $libitem->get_keywords();
+                if ($libitem->getDefaultArtKind() == 'default') {
+                    $keywords = $libitem->getKeywords();
                     $keyword  = '';
                     foreach ($keywords as $key => $word) {
                         $options[$key] = $word['value'];
@@ -1858,7 +1858,7 @@ abstract class Catalog extends AbstractDatabaseObject
         Rating::gc();
         Userflag::gc();
         Useractivity::gc();
-        Playlist::gc();
+        PlaylistPlaylist::gc();
         Tmp_Playlist::gc();
         Shoutbox::gc();
         Tag::gc();
@@ -2011,7 +2011,7 @@ abstract class Catalog extends AbstractDatabaseObject
 
         if (count($songs)) {
             $name        = $pinfo['extension'] . " - " . $pinfo['filename'];
-            $playlist_id = Playlist::create($name, 'public');
+            $playlist_id = PlaylistPlaylist::create($name, 'public');
 
             if (!$playlist_id) {
                 return array(
@@ -2021,7 +2021,7 @@ abstract class Catalog extends AbstractDatabaseObject
             }
 
             /* Recreate the Playlist */
-            $playlist = new Playlist($playlist_id);
+            $playlist = new PlaylistPlaylist($playlist_id);
             $playlist->add_songs($songs, true);
 
             return array(

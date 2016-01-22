@@ -104,7 +104,7 @@ switch ($_REQUEST['action']) {
         $media_ids = $album->get_random_songs();
     break;
     case 'playlist_random':
-        $playlist  = new Playlist($_REQUEST['playlist_id']);
+        $playlist  = new PlaylistPlaylist($_REQUEST['playlist_id']);
         $media_ids = $playlist->get_random_items();
     break;
     case 'random':

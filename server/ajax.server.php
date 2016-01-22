@@ -143,7 +143,7 @@ switch ($_REQUEST['action']) {
                     }
                 break;
                 case 'playlist_random':
-                    $playlist = new Playlist($_REQUEST['id']);
+                    $playlist = new PlaylistPlaylist($_REQUEST['id']);
                     $items    = $playlist->get_random_items();
                     foreach ($items as $item) {
                         $GLOBALS['user']->playlist->add_object($item['object_id'], $item['object_type']);

@@ -97,7 +97,7 @@ class Label extends AbstractDatabaseObject implements LibraryItemInterface
         return true;
     }
 
-    public function display_art($thumb)
+    public function displayArt($thumb)
     {
         if (Art::has_db($this->id, 'label')) {
             Art::display('label', $this->id, $this->getFullname(), $thumb, $this->link);
@@ -130,12 +130,12 @@ class Label extends AbstractDatabaseObject implements LibraryItemInterface
         return array('artist' => $medias);
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return $this->summary;
     }
@@ -145,7 +145,7 @@ class Label extends AbstractDatabaseObject implements LibraryItemInterface
         return $this->f_name;
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords          = array();
         $keywords['label'] = array('important' => true,
@@ -174,7 +174,7 @@ class Label extends AbstractDatabaseObject implements LibraryItemInterface
         return null;
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return $this->user;
     }

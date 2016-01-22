@@ -41,7 +41,7 @@ $web_path = AmpConfig::get('web_path');
 </colgroup>
 <?php
 if (!count($object_ids)) {
-    $playlist = new Playlist($democratic->base_playlist);
+    $playlist = new PlaylistPlaylist($democratic->base_playlist);
     ?>
 <tr>
 <td>

@@ -113,9 +113,9 @@ class Clip extends Video
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
-        $keywords = parent::get_keywords();
+        $keywords = parent::getKeywords();
         if ($this->artist) {
             $keywords['artist'] = array('important' => true,
                 'label' => T_('Artist'),

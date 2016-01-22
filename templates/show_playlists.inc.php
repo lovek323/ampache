@@ -56,7 +56,7 @@
     <tbody>
         <?php
         foreach ($object_ids as $playlist_id) {
-            $libitem = new Playlist($playlist_id);
+            $libitem = new PlaylistPlaylist($playlist_id);
             $libitem->format();
             ?>
         <tr class="<?php echo UI::flip_class();

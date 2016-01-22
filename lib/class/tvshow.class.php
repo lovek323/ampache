@@ -187,7 +187,7 @@ class TVShow extends AbstractDatabaseObject implements LibraryItemInterface
         return true;
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords           = array();
         $keywords['tvshow'] = array('important' => true,
@@ -247,22 +247,22 @@ class TVShow extends AbstractDatabaseObject implements LibraryItemInterface
         return array($this->catalog_id);
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return $this->summary;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         if (Art::has_db($this->id, 'tvshow')) {
             Art::display('tvshow', $this->id, $this->getFullname(), $thumb, $this->link);

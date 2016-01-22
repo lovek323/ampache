@@ -31,7 +31,7 @@ $results = array();
 switch ($_REQUEST['action']) {
     case 'delete_track':
         // Create the object and remove the track
-        $playlist = new Playlist($_REQUEST['playlist_id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         $playlist->format();
         if ($playlist->has_access()) {
             $playlist->delete_track($_REQUEST['track_id']);
@@ -65,13 +65,13 @@ switch ($_REQUEST['action']) {
             if (empty($name)) {
                 $name = $GLOBALS['user']->username . ' - ' . date("Y-m-d H:i:s",time());
             }
-            $playlist_id = Playlist::create($name, 'private');
+            $playlist_id = PlaylistPlaylist::create($name, 'private');
             if (!$playlist_id) {
                 break;
             }
-            $playlist = new Playlist($playlist_id);
+            $playlist = new PlaylistPlaylist($playlist_id);
         } else {
-            $playlist = new Playlist($_REQUEST['playlist_id']);
+            $playlist = new PlaylistPlaylist($_REQUEST['playlist_id']);
         }
 
         if (!$playlist->has_access()) {

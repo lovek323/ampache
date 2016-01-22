@@ -835,11 +835,11 @@ class Subsonic_Api
 
         // Don't allow playlist listing for another user
         if (empty($username) || $username == $GLOBALS['user']->username) {
-            Subsonic_XML_Data::addPlaylists($r, Playlist::get_playlists(), Search::get_searches());
+            Subsonic_XML_Data::addPlaylists($r, PlaylistPlaylist::get_playlists(), Search::get_searches());
         } else {
             $user = User::get_from_username($username);
             if ($user->id) {
-                Subsonic_XML_Data::addPlaylists($r, Playlist::get_users($user->id));
+                Subsonic_XML_Data::addPlaylists($r, PlaylistPlaylist::get_users($user->id));
             } else {
                 Subsonic_XML_Data::addPlaylists($r, array());
             }
@@ -863,7 +863,7 @@ class Subsonic_Api
             $playlist = new Search(Subsonic_XML_Data::getAmpacheId($playlistid), 'song');
             Subsonic_XML_Data::addSmartPlaylist($r, $playlist, true);
         } else {
-            $playlist = new Playlist($playlistid);
+            $playlist = new PlaylistPlaylist($playlistid);
             Subsonic_XML_Data::addPlaylist($r, $playlist, true);
         }
         self::apiOutput($input, $r);
@@ -887,7 +887,7 @@ class Subsonic_Api
             $r = Subsonic_XML_Data::createSuccessResponse();
         } else {
             if (!empty($name)) {
-                $playlistId = Playlist::create($name, 'private');
+                $playlistId = PlaylistPlaylist::create($name, 'private');
                 if (count($songId) > 0) {
                     self::_updatePlaylist($playlistId, "", $songId);
                 }
@@ -901,7 +901,7 @@ class Subsonic_Api
 
     private static function _updatePlaylist($id, $name, $songsIdToAdd = array(), $songIndexToRemove = array(), $public = true)
     {
-        $playlist = new Playlist($id);
+        $playlist = new PlaylistPlaylist($id);
 
         $newdata            = array();
         $newdata['name']    = (!empty($name)) ? $name : $playlist->name;
@@ -976,7 +976,7 @@ class Subsonic_Api
             $playlist = new Search(Subsonic_XML_Data::getAmpacheId($playlistId), 'song');
             $playlist->delete();
         } else {
-            $playlist = new Playlist(Subsonic_XML_Data::getAmpacheId($playlistId));
+            $playlist = new PlaylistPlaylist(Subsonic_XML_Data::getAmpacheId($playlistId));
             $playlist->delete();
         }
 

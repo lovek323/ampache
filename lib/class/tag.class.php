@@ -707,7 +707,7 @@ class Tag extends AbstractDatabaseObject implements LibraryItemInterface
     {
     }
 
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords        = array();
         $keywords['tag'] = array('important' => true,
@@ -765,22 +765,22 @@ class Tag extends AbstractDatabaseObject implements LibraryItemInterface
         return array();
     }
 
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return null;
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         if (Art::has_db($this->id, 'tag')) {
             Art::display('tag', $this->id, $this->getFullname(), $thumb, $this->link);

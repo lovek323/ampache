@@ -29,15 +29,15 @@
  */
 interface LibraryItemInterface extends PlayableItemInterface
 {
-    public function get_keywords();
+    public function getKeywords();
 
-    public function get_user_owner();
+    public function getUserOwner();
 
-    public function get_default_art_kind();
+    public function getDefaultArtKind();
 
-    public function get_description();
+    public function getDescription();
 
-    public function display_art($thumb);
+    public function displayArt($thumb);
 
     public function update(array $data);
 

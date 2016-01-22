@@ -1440,7 +1440,7 @@ EOSQL;
     {
         if ($check_owner) {
             $item = new Song($songId);
-            if ($item->id && $item->get_user_owner() == $GLOBALS['user']->id) {
+            if ($item->id && $item->getUserOwner() == $GLOBALS['user']->id) {
                 $level = 25;
             }
         }
@@ -1473,7 +1473,7 @@ EOSQL;
     {
         if ($check_owner) {
             $item = new Song($songId);
-            if ($item->id && $item->get_user_owner() == $GLOBALS['user']->id) {
+            if ($item->id && $item->getUserOwner() == $GLOBALS['user']->id) {
                 $level = 25;
             }
         }
@@ -1561,7 +1561,7 @@ EOSQL;
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords = [];
         $keywords['mb_trackid'] = [
@@ -1651,7 +1651,7 @@ EOSQL;
      * Get item's owner.
      * @return int|null
      */
-    public function get_user_owner()
+    public function getUserOwner()
     {
         if ($this->user_upload) {
             return $this->user_upload;
@@ -1664,12 +1664,12 @@ EOSQL;
      * Get default art kind for this item.
      * @return string
      */
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         if (!empty($this->comment)) {
             return $this->comment;
@@ -1677,10 +1677,10 @@ EOSQL;
 
         $album = new Album($this->album);
         $album->format();
-        return $album->get_description();
+        return $album->getDescription();
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id = null;
         $type = null;

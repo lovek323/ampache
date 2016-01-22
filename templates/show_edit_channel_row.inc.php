@@ -27,9 +27,9 @@
                 <td class="edit_dialog_content_header"><?php echo T_('Stream Source') ?></td>
                 <td><select name="object_id" autofocus>
 <?php
-                        $playlists = Playlist::get_playlists();
+                        $playlists = PlaylistPlaylist::get_playlists();
                         foreach ($playlists as $playlist_id) {
-                            $playlist = new Playlist($playlist_id);
+                            $playlist = new PlaylistPlaylist($playlist_id);
                             $playlist->format();
                             echo "<option value='" . $playlist->id . "'";
                             if ($playlist->id == $libitem->object_id) {

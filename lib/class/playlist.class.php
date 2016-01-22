@@ -26,7 +26,7 @@
  * This class handles playlists in ampache. it references the playlist* tables
  *
  */
-class Playlist extends playlist_objectAbstract
+class PlaylistPlaylist extends AbstractPlaylist
 {
     /* Variables from the database */
     public $genre;

@@ -404,7 +404,7 @@ class Upnp_Api
                     break;
 
                     case 2:
-                        $playlist = new Playlist($pathreq[1]);
+                        $playlist = new PlaylistPlaylist($pathreq[1]);
                         if ($playlist->id) {
                             $playlist->format();
                             $meta = self::_itemPlaylist($playlist, $root . '/playlists');
@@ -604,16 +604,16 @@ class Upnp_Api
             case 'playlists':
                 switch (count($pathreq)) {
                     case 1: // Get playlists list
-                        $pl_ids                  = Playlist::get_playlists();
+                        $pl_ids                  = PlaylistPlaylist::get_playlists();
                         list($maxCount, $pl_ids) = self::_slice($pl_ids, $start, $count);
                         foreach ($pl_ids as $pl_id) {
-                            $playlist = new Playlist($pl_id);
+                            $playlist = new PlaylistPlaylist($pl_id);
                             $playlist->format();
                             $mediaItems[] = self::_itemPlaylist($playlist, $parent);
                         }
                     break;
                     case 2: // Get playlist's songs list
-                        $playlist = new Playlist($pathreq[1]);
+                        $playlist = new PlaylistPlaylist($pathreq[1]);
                         if ($playlist->id) {
                             $items                  = $playlist->get_items();
                             list($maxCount, $items) = self::_slice($items, $start, $count);

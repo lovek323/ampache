@@ -127,9 +127,9 @@ class Movie extends Video
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
-        $keywords         = parent::get_keywords();
+        $keywords         = parent::getKeywords();
         $keywords['type'] = array('important' => false,
             'label' => null,
             'value' => 'movie'
@@ -138,7 +138,7 @@ class Movie extends Video
         return $keywords;
     }
 
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'default';
     }

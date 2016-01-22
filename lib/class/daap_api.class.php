@@ -328,7 +328,7 @@ class Daap_Api
             $r .= self::tlv('dmap.itemname', 'Ampache');
             $counts = Catalog::count_medias();
             $r .= self::tlv('dmap.itemcount', $counts['songs']);
-            $r .= self::tlv('dmap.containercount', count(Playlist::get_playlists()));
+            $r .= self::tlv('dmap.containercount', count(PlaylistPlaylist::get_playlists()));
             $r = self::tlv('dmap.listingitem', $r);
             $o .= self::tlv('dmap.listing', $r);
             
@@ -347,14 +347,14 @@ class Daap_Api
                 $o = self::tlv('dmap.status', 200);
                 $o .= self::tlv('dmap.updatetype', 0);
                 
-                $playlists = Playlist::get_playlists();
+                $playlists = PlaylistPlaylist::get_playlists();
                 $searches  = Search::get_searches();
                 $o .= self::tlv('dmap.specifiedtotalcount', count($playlists) + count($searches) + 1);
                 $o .= self::tlv('dmap.returnedcount', count($playlists) + count($searches) + 1);
                 
                 $l = self::base_library();
                 foreach ($playlists as $playlist_id) {
-                    $playlist = new Playlist($playlist_id);
+                    $playlist = new PlaylistPlaylist($playlist_id);
                     $playlist->format();
                     $l .= self::tlv_playlist($playlist);
                 }
@@ -402,7 +402,7 @@ class Daap_Api
                         $id -= Daap_Api::AMPACHEID_SMARTPL;
                         $playlist = new Search($id, 'song');
                     } else {
-                        $playlist = new Playlist($id);
+                        $playlist = new PlaylistPlaylist($id);
                     }
 
                     if ($playlist->id) {

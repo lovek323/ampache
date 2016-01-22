@@ -169,9 +169,9 @@ class TVShow_Episode extends Video
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
-        $keywords           = parent::get_keywords();
+        $keywords           = parent::getKeywords();
         $keywords['tvshow'] = array('important' => true,
             'label' => T_('TV Show'),
             'value' => $this->f_tvshow);
@@ -203,17 +203,17 @@ class TVShow_Episode extends Video
         );
     }
 
-    public function get_description()
+    public function getDescription()
     {
         if (!empty($this->summary)) {
             return $this->summary;
         }
 
         $season = new TVShow_Season($this->season);
-        return $season->get_description();
+        return $season->getDescription();
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         $id   = null;
         $type = null;

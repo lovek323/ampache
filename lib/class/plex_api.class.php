@@ -941,7 +941,7 @@ class Plex_Api
                         Plex_XML_Data::addMovie($r, $litem, true);
                     }
                 } elseif (Plex_XML_Data::isPlaylist($key)) {
-                    $litem = new Playlist($id);
+                    $litem = new PlaylistPlaylist($id);
                     $litem->format();
                     if ($editMode) {
                         $dmap = array(
@@ -1428,8 +1428,8 @@ class Plex_Api
                 //$summary = $_GET['summary'];
                 $uri = $_GET['uri'];
 
-                $plid     = Playlist::create($title, 'public');
-                $playlist = new Playlist($plid);
+                $plid     = PlaylistPlaylist::create($title, 'public');
+                $playlist = new PlaylistPlaylist($plid);
                 $key      = Plex_XML_Data::getKeyFromFullUri($uri);
                 $id       = Plex_XML_Data::getKeyFromMetadataUri($key);
                 if ($id) {
@@ -1446,7 +1446,7 @@ class Plex_Api
 
             if ($plid) {
                 if (Plex_XML_Data::isPlaylist($plid)) {
-                    $playlist = new Playlist(Plex_XML_Data::getAmpacheId($plid));
+                    $playlist = new PlaylistPlaylist(Plex_XML_Data::getAmpacheId($plid));
                     if ($playlist->id) {
                         if ($delMode) {
                             // Delete playlist
@@ -1464,7 +1464,7 @@ class Plex_Api
         } elseif ($n >= 2) {
             $plid = $params[0];
             if (Plex_XML_Data::isPlaylist($plid) && $params[1] == "items") {
-                $playlist = new Playlist(Plex_XML_Data::getAmpacheId($plid));
+                $playlist = new PlaylistPlaylist(Plex_XML_Data::getAmpacheId($plid));
                 if ($playlist->id) {
                     if ($n == 2) {
                         if ($editMode) {

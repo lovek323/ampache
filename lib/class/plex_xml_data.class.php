@@ -1293,9 +1293,9 @@ class Plex_XML_Data
 
     public static function setPlaylists(SimpleXMLElement $xml)
     {
-        $playlists = Playlist::get_playlists();
+        $playlists = PlaylistPlaylist::get_playlists();
         foreach ($playlists as $playlist_id) {
-            $playlist = new Playlist($playlist_id);
+            $playlist = new PlaylistPlaylist($playlist_id);
             $playlist->format();
             self::addPlaylist($xml, $playlist);
         }
@@ -1373,7 +1373,7 @@ class Plex_XML_Data
         } else {
             // Add complete playlist
             if (self::isPlaylist($playlistID)) {
-                $playlist = new Playlist(self::getAmpacheId($playlistID));
+                $playlist = new PlaylistPlaylist(self::getAmpacheId($playlistID));
                 if ($shuffle) {
                     $plmedias = $playlist->get_random_items();
                 } else {

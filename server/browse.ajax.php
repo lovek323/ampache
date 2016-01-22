@@ -103,7 +103,7 @@ switch ($_REQUEST['action']) {
         switch ($_REQUEST['type']) {
             case 'playlist':
                 // Check the perms we need to on this
-                $playlist = new Playlist($_REQUEST['id']);
+                $playlist = new PlaylistPlaylist($_REQUEST['id']);
                 if (!$playlist->has_access()) {
                     exit;
                 }

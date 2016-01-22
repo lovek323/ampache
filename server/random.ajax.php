@@ -80,7 +80,7 @@ switch ($_REQUEST['action']) {
             break;
         }
 
-        $playlist = new Playlist($playlist_id);
+        $playlist = new PlaylistPlaylist($playlist_id);
         $items    = $playlist->get_items();
         foreach ($items as $item) {
             $GLOBALS['user']->playlist->add_object($item['object_id'], $item['object_type']);

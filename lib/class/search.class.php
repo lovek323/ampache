@@ -25,7 +25,7 @@
  * Search-related voodoo.  Beware tentacles.
  */
 
-class Search extends playlist_objectAbstract
+class Search extends AbstractPlaylist
 {
     public $searchtype;
     public $rules;
@@ -369,8 +369,8 @@ class Search extends playlist_objectAbstract
             );
 
             $playlists = array();
-            foreach (Playlist::get_playlists() as $playlistid) {
-                $playlist = new Playlist($playlistid);
+            foreach (PlaylistPlaylist::get_playlists() as $playlistid) {
+                $playlist = new PlaylistPlaylist($playlistid);
                 $playlist->format();
                 $playlists[$playlistid] = $playlist->f_name;
             }

@@ -29,7 +29,7 @@ debug_event('refresh_reordered.server.php', 'Called for action: {' . $_REQUEST['
 /* Switch on the action passed in */
 switch ($_REQUEST['action']) {
     case 'refresh_playlist_medias':
-        $playlist = new Playlist($_REQUEST['id']);
+        $playlist = new PlaylistPlaylist($_REQUEST['id']);
         $playlist->format();
         $object_ids = $playlist->get_items();
         $browse     = new Browse();

@@ -142,7 +142,7 @@ switch ($_REQUEST['action']) {
                 $sres                         = array_unique(array_merge($sres, Search::run($searchreq)));
             }
             foreach ($sres as $id) {
-                $playlist = new Playlist($id);
+                $playlist = new PlaylistPlaylist($id);
                 $playlist->format(false);
                 $results[] = array(
                     'type' => T_('Playlists'),

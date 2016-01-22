@@ -55,10 +55,10 @@ switch ($type) {
         $items = Catalog::get_artists();
     break;
     default:
-        $ids = Playlist::get_playlists(false, -1);
+        $ids = PlaylistPlaylist::get_playlists(false, -1);
         $items = array();
         foreach ($ids as $id) {
-            $items[] = new Playlist($id);
+            $items[] = new PlaylistPlaylist($id);
         }
     break;
 } // end type switch

@@ -295,7 +295,7 @@ class Video extends AbstractDatabaseObject implements MediaInterface, LibraryIte
      * Get item keywords for metadata searches.
      * @return array
      */
-    public function get_keywords()
+    public function getKeywords()
     {
         $keywords          = array();
         $keywords['title'] = array('important' => true,
@@ -374,7 +374,7 @@ class Video extends AbstractDatabaseObject implements MediaInterface, LibraryIte
      * Get item's owner.
      * @return int|null
      */
-    public function get_user_owner()
+    public function getUserOwner()
     {
         return null;
     }
@@ -383,17 +383,17 @@ class Video extends AbstractDatabaseObject implements MediaInterface, LibraryIte
      * Get default art kind for this item.
      * @return string
      */
-    public function get_default_art_kind()
+    public function getDefaultArtKind()
     {
         return 'preview';
     }
 
-    public function get_description()
+    public function getDescription()
     {
         return '';
     }
 
-    public function display_art($thumb = 2)
+    public function displayArt($thumb = 2)
     {
         if (Art::has_db($this->id, 'video')) {
             Art::display('video', $this->id, $this->getFullname(), $thumb, $this->link);

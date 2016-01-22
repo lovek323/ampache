@@ -607,7 +607,7 @@ class Subsonic_XML_Data
     {
         $xplaylists = $xml->addChild('playlists');
         foreach ($playlists as $id) {
-            $playlist = new Playlist($id);
+            $playlist = new PlaylistPlaylist($id);
             self::addPlaylist($xplaylists, $playlist);
         }
         foreach ($smartplaylists as $id) {
@@ -791,7 +791,7 @@ class Subsonic_XML_Data
             $song = new Song($share->object_id);
             self::addSong($xshare, $song, false, "entry");
         } elseif ($share->object_type == 'playlist') {
-            $playlist = new Playlist($share->object_id);
+            $playlist = new PlaylistPlaylist($share->object_id);
             $songs    = $playlist->get_songs();
             foreach ($songs as $id) {
                 $song = new Song($id);

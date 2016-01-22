@@ -292,7 +292,7 @@ class Democratic extends Tmp_Playlist
         // If nothing was found and this is a voting playlist then get
         // from base_playlist
         if ($this->base_playlist) {
-            $base_playlist = new Playlist($this->base_playlist);
+            $base_playlist = new PlaylistPlaylist($this->base_playlist);
             $data          = $base_playlist->get_random_items(1);
             return $data[0]['object_id'];
         } else {

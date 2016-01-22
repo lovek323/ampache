@@ -1,32 +1,14 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
+namespace Ampache;
+
+use AmpConfig;
+use Dba;
 
 /**
- * database_object
- *
  * This is a general object that is extended by all of the basic
  * database based objects in ampache. It attempts to do some standard
  * caching for all of the objects to cut down on the database calls
- *
  */
 abstract class AbstractDatabaseObject
 {
@@ -34,29 +16,30 @@ abstract class AbstractDatabaseObject
 
     // Statistics for debugging
     public static $cache_hit = 0;
-    private static $_enabled = false;
+
+    private static $enabled = false;
 
     /**
-     * get_info
-     * retrieves the info from the database and puts it in the cache
+     * Retrieves the info from the database and puts it in the cache.
+     *
      * @param $id
-     * @param string $table_name
+     * @param string $tableName
      * @return array|bool
      */
-    public function get_info($id, $table_name = '')
+    public function getInfo($id, $tableName = '')
     {
-        $table_name = $table_name ? Dba::escape($table_name) : Dba::escape(strtolower(get_class($this)));
+        $tableName = $tableName ? Dba::escape($tableName) : Dba::escape(strtolower(get_class($this)));
 
         // Make sure we've got a real id
         if (!is_numeric($id)) {
             return [];
         }
 
-        if (self::is_cached($table_name, $id)) {
-            return self::get_from_cache($table_name, $id);
+        if (self::isCached($tableName, $id)) {
+            return self::getFromCache($tableName, $id);
         }
 
-        $sql = "SELECT * FROM `$table_name` WHERE `id`='$id'";
+        $sql = "SELECT * FROM `$tableName` WHERE `id`='$id'";
         $db_results = Dba::read($sql);
 
         if (!$db_results) {
@@ -65,7 +48,7 @@ abstract class AbstractDatabaseObject
 
         $row = Dba::fetchAssoc($db_results);
 
-        self::add_to_cache($table_name, $id, $row);
+        self::addToCache($tableName, $id, $row);
 
         return $row;
     } // get_info
@@ -73,7 +56,7 @@ abstract class AbstractDatabaseObject
     /**
      * clear_cache
      */
-    public static function clear_cache()
+    public static function clearCache()
     {
         self::$object_cache = [];
     }
@@ -85,7 +68,7 @@ abstract class AbstractDatabaseObject
      * @param $id
      * @return bool
      */
-    public static function is_cached($index, $id)
+    public static function isCached($index, $id)
     {
         // Make sure we've got some parents here before we dive below
         if (!isset(self::$object_cache[$index])) {
@@ -102,7 +85,7 @@ abstract class AbstractDatabaseObject
      * @param $id
      * @return bool
      */
-    public static function get_from_cache($index, $id)
+    public static function getFromCache($index, $id)
     {
         // Check if the object is set
         if (isset(self::$object_cache[$index]) && isset(self::$object_cache[$index][$id])) {
@@ -114,16 +97,15 @@ abstract class AbstractDatabaseObject
     } // get_from_cache
 
     /**
-     * add_to_cache
      * This adds the specified object to the specified index in the cache
      * @param $index
      * @param $id
      * @param $data
      * @return bool|null
      */
-    public static function add_to_cache($index, $id, $data)
+    public static function addToCache($index, $id, $data)
     {
-        if (!self::$_enabled) {
+        if (!self::$enabled) {
             return false;
         }
         $value = is_null($data) ? false : $data;
@@ -132,26 +114,25 @@ abstract class AbstractDatabaseObject
     }
 
     /**
-     * remove_from_cache
      * This function clears something from the cache, there are a few places we need to do this
      * in order to have things display correctly
      * @param $index
      * @param $id
      */
-    public static function remove_from_cache($index, $id)
+    public static function removeFromCache($index, $id)
     {
         if (isset(self::$object_cache[$index]) && isset(self::$object_cache[$index][$id])) {
             unset(self::$object_cache[$index][$id]);
         }
-    } // remove_from_cache
+    }
 
     /**
-     * _auto_init
      * Load in the cache settings once so we can avoid function calls
      */
-    public static function _auto_init()
+    public static function autoInit()
     {
-        self::$_enabled = AmpConfig::get('memory_cache');
-    } // _auto_init
-} // end database_object
+        self::$enabled = AmpConfig::get('memory_cache');
+    }
+}
 
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

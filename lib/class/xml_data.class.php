@@ -399,7 +399,7 @@ class XML_Data
 
         // Foreach the playlist ids
         foreach ($playlists as $playlist_id) {
-            $playlist = new Playlist($playlist_id);
+            $playlist = new PlaylistPlaylist($playlist_id);
             $playlist->format();
             $item_total = $playlist->get_media_count('song');
 
@@ -826,7 +826,7 @@ class XML_Data
             $ximg = $xchannel->addChild("xmlns:itunes:image");
             $ximg->addAttribute("href", Art::url($libitem->id, get_class($libitem)));
         }
-        $summary = $libitem->get_description();
+        $summary = $libitem->getDescription();
         if (!empty($summary)) {
             $summary = htmlentities($summary);
             $xchannel->addChild("description", $summary);
@@ -834,7 +834,7 @@ class XML_Data
         }
         $xchannel->addChild("generator", "Ampache");
         $xchannel->addChild("xmlns:itunes:category", "Music");
-        $owner = $libitem->get_user_owner();
+        $owner = $libitem->getUserOwner();
         if ($owner) {
             $user_owner = new User($owner);
             $user_owner->format();

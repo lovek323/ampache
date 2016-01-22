@@ -1,24 +1,6 @@
 <?php
-/* vim:set softtabstop=4 shiftwidth=4 expandtab: */
-/**
- *
- * LICENSE: GNU Affero General Public License, version 3 (AGPLv3)
- * Copyright 2001 - 2015 Ampache.org
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
+use Ampache\Preference;
 
 $prefix = dirname(__FILE__);
 require_once $prefix . '/lib/init-tiny.php';
@@ -35,30 +17,30 @@ if (!installCheckStatus($configfile)) {
 
 define('INSTALL', 1);
 
-$htaccess_play_file    = AmpConfig::get('prefix') . '/play/.htaccess';
-$htaccess_rest_file    = AmpConfig::get('prefix') . '/rest/.htaccess';
+$htaccess_play_file = AmpConfig::get('prefix') . '/play/.htaccess';
+$htaccess_rest_file = AmpConfig::get('prefix') . '/rest/.htaccess';
 $htaccess_channel_file = AmpConfig::get('prefix') . '/channel/.htaccess';
 
 // Clean up incoming variables
-$web_path   = scrub_in($_REQUEST['web_path']);
-$username   = scrub_in($_REQUEST['local_username']);
-$password   = $_REQUEST['local_pass'];
-$hostname   = scrub_in($_REQUEST['local_host']);
-$database   = scrub_in($_REQUEST['local_db']);
-$port       = scrub_in($_REQUEST['local_port']);
+$web_path = scrub_in($_REQUEST['web_path']);
+$username = scrub_in($_REQUEST['local_username']);
+$password = $_REQUEST['local_pass'];
+$hostname = scrub_in($_REQUEST['local_host']);
+$database = scrub_in($_REQUEST['local_db']);
+$port = scrub_in($_REQUEST['local_port']);
 $skip_admin = isset($_REQUEST['skip_admin']);
 
-AmpConfig::set_by_array(array(
+AmpConfig::set_by_array([
     'web_path' => $web_path,
     'database_name' => $database,
     'database_hostname' => $hostname,
     'database_port' => $port
-), true);
+], true);
 if (!$skip_admin) {
-    AmpConfig::set_by_array(array(
+    AmpConfig::set_by_array([
         'database_username' => $username,
         'database_password' => $password
-    ), true);
+    ], true);
 }
 
 if (isset($_REQUEST['transcode_template'])) {
@@ -82,7 +64,7 @@ if (isset($_REQUEST['backends'])) {
 
 // Charset and gettext setup
 $htmllang = $_REQUEST['htmllang'];
-$charset  = $_REQUEST['charset'];
+$charset = $_REQUEST['charset'];
 
 if (!$htmllang) {
     if ($_ENV['LANG']) {
@@ -91,9 +73,9 @@ if (!$htmllang) {
         $lang = 'en_US';
     }
     if (strpos($lang, '.')) {
-        $langtmp  = explode('.', $lang);
+        $langtmp = explode('.', $lang);
         $htmllang = $langtmp[0];
-        $charset  = $langtmp[1];
+        $charset = $langtmp[1];
     } else {
         $htmllang = $lang;
     }
@@ -101,7 +83,7 @@ if (!$htmllang) {
 AmpConfig::set('lang', $htmllang, true);
 AmpConfig::set('site_charset', $charset ?: 'UTF-8', true);
 load_gettext();
-header ('Content-Type: text/html; charset=' . AmpConfig::get('site_charset'));
+header('Content-Type: text/html; charset=' . AmpConfig::get('site_charset'));
 
 // Correct potential \ or / in the dirname
 $safe_dirname = get_web_path();
@@ -126,7 +108,13 @@ switch ($_REQUEST['action']) {
         }
 
         if (!$skip_admin) {
-            if (!install_insert_db($new_user, $new_pass, $_REQUEST['create_db'], $_REQUEST['overwrite_db'], $_REQUEST['create_tables'])) {
+            if (!install_insert_db(
+                $new_user,
+                $new_pass,
+                $_REQUEST['create_db'],
+                $_REQUEST['overwrite_db'],
+                $_REQUEST['create_tables']
+            )) {
                 require_once 'templates/show_install.inc.php';
                 break;
             }
@@ -134,36 +122,42 @@ switch ($_REQUEST['action']) {
 
         // Now that it's inserted save the lang preference
         Preference::update('lang', '-1', AmpConfig::get('lang'));
+
+        // nobreak
     case 'show_create_config':
         require_once 'templates/show_install_config.inc.php';
-    break;
+        break;
     case 'create_config':
-        $all  = (isset($_POST['create_all']));
+        $all = (isset($_POST['create_all']));
         $skip = (isset($_POST['skip_config']));
         if (!$skip) {
-            $write                     = (isset($_POST['write']));
-            $download                  = (isset($_POST['download']));
+            $write = (isset($_POST['write']));
+            $download = (isset($_POST['download']));
             $download_htaccess_channel = (isset($_POST['download_htaccess_channel']));
-            $download_htaccess_rest    = (isset($_POST['download_htaccess_rest']));
-            $download_htaccess_play    = (isset($_POST['download_htaccess_play']));
-            $write_htaccess_channel    = (isset($_POST['write_htaccess_channel']));
-            $write_htaccess_rest       = (isset($_POST['write_htaccess_rest']));
-            $write_htaccess_play       = (isset($_POST['write_htaccess_play']));
+            $download_htaccess_rest = (isset($_POST['download_htaccess_rest']));
+            $download_htaccess_play = (isset($_POST['download_htaccess_play']));
+            $write_htaccess_channel = (isset($_POST['write_htaccess_channel']));
+            $write_htaccess_rest = (isset($_POST['write_htaccess_rest']));
+            $write_htaccess_play = (isset($_POST['write_htaccess_play']));
 
             $created_config = true;
             if ($write_htaccess_channel || $download_htaccess_channel || $all) {
-                $created_config = $created_config && installRewriteRules($htaccess_channel_file, $_POST['web_path'], $download_htaccess_channel);
+                $created_config = $created_config
+                    && installRewriteRules($htaccess_channel_file, $_POST['web_path'], $download_htaccess_channel);
             }
             if ($write_htaccess_rest || $download_htaccess_rest || $all) {
-                $created_config = $created_config && installRewriteRules($htaccess_rest_file, $_POST['web_path'], $download_htaccess_rest);
+                $created_config = $created_config
+                    && installRewriteRules($htaccess_rest_file, $_POST['web_path'], $download_htaccess_rest);
             }
             if ($write_htaccess_play || $download_htaccess_play || $all) {
-                $created_config = $created_config && installRewriteRules($htaccess_play_file, $_POST['web_path'], $download_htaccess_play);
+                $created_config = $created_config
+                    && installRewriteRules($htaccess_play_file, $_POST['web_path'], $download_htaccess_play);
             }
             if ($write || $download || $all) {
                 $created_config = $created_config && install_create_config($download);
             }
         }
+        break;
     case 'show_create_account':
         $results = parse_ini_file($configfile);
         if (!isset($created_config)) {
@@ -181,9 +175,9 @@ switch ($_REQUEST['action']) {
         if (installCheckStatus($configfile)) {
             require_once AmpConfig::get('prefix') . UI::find_template('show_install_account.inc.php');
         } else {
-            header ("Location: " . $web_path . '/login.php');
+            header("Location: " . $web_path . '/login.php');
         }
-    break;
+        break;
     case 'create_account':
         $results = parse_ini_file($configfile);
         AmpConfig::set_by_array($results, true);
@@ -195,17 +189,18 @@ switch ($_REQUEST['action']) {
             break;
         }
 
-        header ("Location: " . $web_path . '/index.php');
-    break;
+        header("Location: " . $web_path . '/index.php');
+        break;
     case 'init':
         require_once 'templates/show_install.inc.php';
-    break;
+        break;
     case 'check':
         require_once 'templates/show_install_check.inc.php';
-    break;
+        break;
     default:
         // Show the language options first
         require_once 'templates/show_install_lang.inc.php';
-    break;
+        break;
 } // end action switch
 
+/* vim:set softtabstop=4 shiftwidth=4 expandtab: */

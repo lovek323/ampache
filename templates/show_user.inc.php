@@ -208,7 +208,7 @@ if ($client->f_avatar) {
 } ?>
         <div id="playlists" class="tab_content">
         <?php
-            $playlist_ids = Playlist::get_playlists(false, $client->id);
+            $playlist_ids = PlaylistPlaylist::get_playlists(false, $client->id);
             $browse       = new Browse();
             $browse->set_type('playlist');
             $browse->set_simple_browse(false);
