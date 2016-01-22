@@ -13,7 +13,7 @@ if (!$iframed) {
 var jpuqid = (new Date()).getMilliseconds();
 var jplaylist = null;
 var timeoffset = 0;
-var last_int_position = 0
+var last_int_position = 0;
 var currentjpitem = null;
 var currentAudioElement = undefined;
 
@@ -112,7 +112,7 @@ if ($isVideo) {
 } ?>
         });
 
-    $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
+    $("#jquery_jplayer_1").bind($.jPlayer.event.play, function () {
         var current = jplaylist.current,
             playlist = jplaylist.playlist;
         var pos = $(".jp-playlist-current").position().top + $(".jp-playlist").scrollTop();
@@ -249,7 +249,7 @@ if (AmpConfig::get('song_page_title') && !$is_share) {
     } ?>
     });
 
-    $("#jquery_jplayer_1").bind($.jPlayer.event.pause, function (event) {
+    $("#jquery_jplayer_1").bind($.jPlayer.event.pause, function () {
         if (brkey != '') {
             sendBroadcastMessage('PLAYER_PLAY', 0);
         }
@@ -339,7 +339,7 @@ if ($is_share && $isVideo) {
 <style>
     div.jp-jplayer
     {
-        bottom: 0px !important;
+        bottom: 0 !important;
         top: 100px !important;
     }
 </style>
@@ -361,6 +361,9 @@ if ($iframed && !$is_share) {
 ?>
 <?php
 $areaClass = "";
+if (!isset($embed)) {
+    $embed = false;
+}
 if ((!AmpConfig::get('waveform') || $is_share) && !$embed) {
     $areaClass .= " jp-area-center";
 }
@@ -508,7 +511,7 @@ if ($isVideo) {
         <?php if (Access::check('interface', '25')) {
     ?>
             <div class="action_button">
-                <a onclick="javascript:SaveToExistingPlaylist(event);">
+                <a onclick="SaveToExistingPlaylist(event);">
                     <?php echo UI::get_icon('playlist_add', T_('Add to existing playlist'));
     ?>
                 </a>
@@ -569,5 +572,5 @@ if (!$iframed || $is_share) {
     ?>
 </body>
 </html>
-<?php 
+<?php
 } ?>
